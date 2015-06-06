@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:name="com.google.android.gms.maps.MapFragment"
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    map:cameraTargetLat="49.2569684"
+    map:cameraTargetLng="-123.1239135"
+    map:cameraZoom="10"
+    map:mapType="normal"
+    map:uiMapToolbar="false"
+    map:uiZoomControls="false"
+    map:uiCompass="true"
+    map:uiRotateGestures="true"
+    map:uiScrollGestures="true"
+    map:uiTiltGestures="true"
+    map:uiZoomGestures="true"/>
