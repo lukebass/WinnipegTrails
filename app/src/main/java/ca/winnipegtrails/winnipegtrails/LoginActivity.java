@@ -70,6 +70,7 @@ public class LoginActivity extends Activity
 
         // If there is a validation error, display the error
         if (validationError) {
+
             Toast.makeText(LoginActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG).show();
             return;
         }
