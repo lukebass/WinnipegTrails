@@ -7,6 +7,12 @@ import com.parse.ParseACL;
 
 public class WinnipegTrailsApplication extends Application
 {
+    // Debugging switch
+    public static final boolean APPDEBUG = false;
+
+    // Debugging tag for the application
+    public static final String APPTAG = "WinnipegTrails";
+
     @Override
     public void onCreate()
     {
