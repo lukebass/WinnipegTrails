@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseObject;
 
 public class WinnipegTrailsApplication extends Application
 {
@@ -18,10 +19,9 @@ public class WinnipegTrailsApplication extends Application
     {
         super.onCreate();
 
-        //ParseObject.registerSubclass(Meal.class);
+        ParseObject.registerSubclass(Egg.class);
         Parse.initialize(this, "Bb7WJJOc7201FlMPXR7X2gg2q6kh84BkFUfo4oXk", "zSy0YCTwt13AGFm36QouRR06TT4LbB86c2q2g3uR");
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
     }
-
 }

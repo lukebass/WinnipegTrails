@@ -24,7 +24,7 @@ import java.util.Map;
 public class MainActivity extends Activity implements OnMapReadyCallback
 {
     private MapFragment mapFragment;
-    private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
+    private final Map<String, Marker> mapMarkers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
