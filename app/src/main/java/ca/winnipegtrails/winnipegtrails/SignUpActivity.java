@@ -84,7 +84,7 @@ public class SignUpActivity extends Activity
         validationErrorMessage.append(getString(R.string.error_end));
 
         // If there is a validation error, display the error
-        if (validationError) {
+        if(validationError) {
 
             Toast.makeText(SignUpActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG).show();
             return;

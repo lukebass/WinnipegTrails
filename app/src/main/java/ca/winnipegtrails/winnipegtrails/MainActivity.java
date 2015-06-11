@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback
                     // Display a green marker with the item information
                     MarkerOptions markerOpts = new MarkerOptions()
                             .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
-                            .title(item.getTitle()).snippet(item.getPoints().toString())
+                            .title(item.getTitle())
+                            .snippet(item.getPoints().toString())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
                     // Add a new marker
