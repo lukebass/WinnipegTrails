@@ -23,7 +23,6 @@ import java.util.Map;
 
 public class MainActivity extends Activity implements OnMapReadyCallback
 {
-    private MapFragment mapFragment;
     private final Map<String, Marker> mapMarkers = new HashMap<>();
 
     @Override
@@ -32,21 +31,26 @@ public class MainActivity extends Activity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap map)
     {
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setMyLocationEnabled(true);
-        doMapQuery();
+        map.getUiSettings().setAllGesturesEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        doMapQuery(map);
     }
 
     /*
     * Set up the query to update the map view
     */
-    private void doMapQuery()
+    private void doMapQuery(GoogleMap map)
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
         mapQuery.orderByDescending("createdAt");
@@ -84,7 +88,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
                     // Add a new marker
-                    Marker marker = mapFragment.getMap().addMarker(markerOpts);
+                    Marker marker = map.addMarker(markerOpts);
                     mapMarkers.put(item.getObjectId(), marker);
                 }
             }
