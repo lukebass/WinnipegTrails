@@ -17,4 +17,5 @@
     <string name="progress_login">Logging you up!</string>
     <string name="signup">Sign up</string>
     <string name="login">Log in</string>
+    <string name="error_google_play">Google Play Services are unavailable.</string>
 </resources>

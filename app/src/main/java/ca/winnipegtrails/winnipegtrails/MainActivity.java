@@ -1,11 +1,19 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -22,10 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity implements OnMapReadyCallback
+public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener
 {
     private GoogleMap googleMap;
     private final Map<String, Marker> mapMarkers = new HashMap<>();
+    private GoogleApiClient googleApiClient;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,6 +45,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        buildGoogleApiClient();
     }
 
     @Override
@@ -98,6 +110,47 @@ public class MainActivity extends Activity implements OnMapReadyCallback
         });
     }
 
+    /*
+     * Get the current location
+     */
+    private Location getLocation() {
+
+        if(servicesConnected()) {
+            return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        }
+        else {
+            return null;
+        }
+    }
+
+    /*
+     * Verify that Google Play services is available before making a request.
+     *
+     * @return true if Google Play services is available, otherwise false
+     */
+    private boolean servicesConnected()
+    {
+        // Check that Google Play services is available
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+
+        // If Google Play services is available
+        if(ConnectionResult.SUCCESS == resultCode) {
+
+            if(WinnipegTrailsApplication.APPDEBUG) {
+                // In debug mode, log the status
+                Log.d(WinnipegTrailsApplication.APPTAG, "Google play services available");
+            }
+            // Continue
+            return true;
+        }
+        // Google Play services was not available for some reason
+        else {
+
+            Toast.makeText(this, R.string.error_google_play, Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -130,5 +183,67 @@ public class MainActivity extends Activity implements OnMapReadyCallback
     {
         super.onResume();
         doMapQuery();
+    }
+
+    /**
+     * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
+     */
+    protected synchronized void buildGoogleApiClient()
+    {
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        if(googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    /**
+     * Runs when a GoogleApiClient object successfully connects.
+     */
+    @Override
+    public void onConnected(Bundle connectionHint)
+    {
+        if(WinnipegTrailsApplication.APPDEBUG) {
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connected to location services");
+        }
+
+        currentLocation = getLocation();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result)
+    {
+        if(WinnipegTrailsApplication.APPDEBUG) {
+            // In debug mode, log the status
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        }
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int cause)
+    {
+        if(WinnipegTrailsApplication.APPDEBUG) {
+            // In debug mode, log the status
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended");
+        }
+
+        googleApiClient.connect();
     }
 }
