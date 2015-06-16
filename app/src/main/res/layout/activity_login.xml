@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/username"
         android:inputType="text"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/password"
@@ -22,8 +21,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/action_button"

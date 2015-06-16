@@ -12,7 +12,7 @@ import com.parse.ParseQueryAdapter;
 
 public class ListActivity extends Activity
 {
-    private ParseQueryAdapter<Egg> postsQueryAdapter;
+    private ParseQueryAdapter<Egg> eggQueryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,7 +32,7 @@ public class ListActivity extends Activity
         };
 
         // Set up the query adapter
-        postsQueryAdapter = new ParseQueryAdapter<Egg>(this, factory)
+        eggQueryAdapter = new ParseQueryAdapter<Egg>(this, factory)
         {
             @Override
             public View getItemView(Egg item, View view, ViewGroup parent)
@@ -50,8 +50,29 @@ public class ListActivity extends Activity
             }
         };
 
+        eggQueryAdapter.setAutoload(false);
+        eggQueryAdapter.setPaginationEnabled(false);
+
         // Attach the query adapter to the view
         ListView postsListView = (ListView) findViewById(R.id.list);
-        postsListView.setAdapter(postsQueryAdapter);
+        postsListView.setAdapter(eggQueryAdapter);
+    }
+
+    /*
+     * Set up a query to update the list view
+     */
+    private void doListQuery()
+    {
+        eggQueryAdapter.loadObjects();
+    }
+
+    /*
+     * Called when the Activity is resumed. Updates the view.
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        doListQuery();
     }
 }

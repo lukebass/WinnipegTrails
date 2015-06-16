@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity implements OnMapReadyCallback
 {
+    private GoogleMap googleMap;
     private final Map<String, Marker> mapMarkers = new HashMap<>();
 
     @Override
@@ -38,19 +40,20 @@ public class MainActivity extends Activity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap map)
     {
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setAllGesturesEnabled(true);
-        map.getUiSettings().setCompassEnabled(true);
-        map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
-        doMapQuery(map);
+        googleMap = map;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setAllGesturesEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49.8994, -97.1392), 10));
     }
 
     /*
-    * Set up the query to update the map view
-    */
-    private void doMapQuery(GoogleMap map)
+     * Set up the query to update the map view
+     */
+    private void doMapQuery()
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
         mapQuery.orderByDescending("createdAt");
@@ -88,7 +91,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
                     // Add a new marker
-                    Marker marker = map.addMarker(markerOpts);
+                    Marker marker = googleMap.addMarker(markerOpts);
                     mapMarkers.put(item.getObjectId(), marker);
                 }
             }
@@ -117,5 +120,15 @@ public class MainActivity extends Activity implements OnMapReadyCallback
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /*
+     * Called when the Activity is resumed. Updates the view.
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        doMapQuery();
     }
 }
