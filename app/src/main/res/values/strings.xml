@@ -17,5 +17,6 @@
     <string name="progress_login">Logging you up!</string>
     <string name="signup">Sign up</string>
     <string name="login">Log in</string>
+    <string name="scan">Scan</string>
     <string name="no_location_detected">Could not detect your location.</string>
 </resources>

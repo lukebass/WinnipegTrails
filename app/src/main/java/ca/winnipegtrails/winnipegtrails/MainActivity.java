@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -41,23 +43,41 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        // Set up the submit button click handler
+        Button scanButton = (Button) findViewById(R.id.scan_button);
+        scanButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                findEggs();
+            }
+        });
 
         buildGoogleApiClient();
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void findEggs() {
+        //TODO
     }
 
     @Override
     public void onMapReady(GoogleMap map)
     {
         googleMap = map;
+
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMyLocationEnabled(true);
+        
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49.8994, -97.1392), 10));
+
+        Location currentLocation = getLocation();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
     }
 
     /*
