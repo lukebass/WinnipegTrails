@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -35,7 +34,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private GoogleMap googleMap;
     private final Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
-    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -115,39 +113,12 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
      */
     private Location getLocation() {
 
-        if(servicesConnected()) {
+        if(googleApiClient.isConnected()) {
             return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         }
         else {
+            Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
             return null;
-        }
-    }
-
-    /*
-     * Verify that Google Play services is available before making a request.
-     *
-     * @return true if Google Play services is available, otherwise false
-     */
-    private boolean servicesConnected()
-    {
-        // Check that Google Play services is available
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-
-        // If Google Play services is available
-        if(ConnectionResult.SUCCESS == resultCode) {
-
-            if(WinnipegTrailsApplication.APPDEBUG) {
-                // In debug mode, log the status
-                Log.d(WinnipegTrailsApplication.APPTAG, "Google play services available");
-            }
-            // Continue
-            return true;
-        }
-        // Google Play services was not available for some reason
-        else {
-
-            Toast.makeText(this, R.string.error_google_play, Toast.LENGTH_LONG).show();
-            return false;
         }
     }
 
@@ -220,10 +191,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     public void onConnected(Bundle connectionHint)
     {
         if(WinnipegTrailsApplication.APPDEBUG) {
+            // In debug mode, log the status
             Log.d(WinnipegTrailsApplication.APPTAG, "Connected to location services");
         }
-
-        currentLocation = getLocation();
     }
 
     @Override
