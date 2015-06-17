@@ -203,9 +203,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_gems:
+                startActivity(new Intent(this, EggListActivity.class));
                 return true;
-            case R.id.action_help:
+            case R.id.action_leaderboard:
+                startActivity(new Intent(this, UserListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
