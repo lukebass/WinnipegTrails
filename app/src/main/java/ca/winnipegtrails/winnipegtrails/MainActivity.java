@@ -48,8 +48,10 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         // Set up the submit button click handler
         Button scanButton = (Button) findViewById(R.id.scan_button);
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        scanButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 findEggs();
             }
         });
@@ -72,7 +74,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             {
                 if(e != null) {
 
-                    if (WinnipegTrailsApplication.APPDEBUG) {
+                    if(WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
                     }
 
@@ -100,7 +102,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                             fragment.setArguments(args);
                         }
                         else {
-
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         }
 
