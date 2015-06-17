@@ -2,6 +2,7 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +70,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             @Override
             public void done(List<Egg> objects, ParseException e)
             {
-                if (e != null) {
+                if(e != null) {
 
                     if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
@@ -83,17 +85,24 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 }
 
                 // Loop through the results of the search
-                for (Egg item : objects) {
+                for(Egg item : objects) {
 
                     float[] results = new float[1];
                     Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
-                    if (results[0] < item.getActionRadiusMeters().doubleValue()) {
+                    if(results[0] < item.getActionRadiusMeters().doubleValue()) {
 
-                        DialogFragment fragment = new EggDialogFragment();
-                        Bundle args = new Bundle();
-                        args.putString("title", item.getTitle());
-                        fragment.setArguments(args);
+                        if(ParseUser.getCurrentUser() != null) {
+
+                            DialogFragment fragment = new EggDialogFragment();
+                            Bundle args = new Bundle();
+                            args.putString("title", item.getTitle());
+                            fragment.setArguments(args);
+                        }
+                        else {
+
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        }
 
                         break;
                     }
