@@ -45,7 +45,13 @@ public class UserListActivity extends Activity
                 TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
                 TextView pointsView = (TextView) view.findViewById(R.id.list_item_points);
                 titleView.setText(item.getUsername());
-                pointsView.setText(item.getNumber("points").toString());
+
+                if(item.getNumber("points") == null) {
+                    pointsView.setText("0");
+                }
+                else {
+                    pointsView.setText(item.getNumber("points").toString());
+                }
 
                 return view;
             }
