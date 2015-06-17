@@ -1,6 +1,7 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,10 +46,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         // Set up the submit button click handler
         Button scanButton = (Button) findViewById(R.id.scan_button);
-        scanButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 findEggs();
             }
         });
@@ -59,8 +58,46 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         mapFragment.getMapAsync(this);
     }
 
-    private void findEggs() {
-        //TODO
+    private void findEggs()
+    {
+        Location currentLocation = getLocation();
+        if(currentLocation == null) {
+            return;
+        }
+
+        ParseQuery<Egg> mapQuery = Egg.getQuery();
+        mapQuery.orderByDescending("createdAt");
+
+        mapQuery.findInBackground(new FindCallback<Egg>() {
+            @Override
+            public void done(List<Egg> objects, ParseException e) {
+                if (e != null) {
+
+                    if (WinnipegTrailsApplication.APPDEBUG) {
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
+                    }
+
+                    return;
+                }
+
+                // Loop through the results of the search
+                for (Egg item : objects) {
+
+                    float[] results = new float[1];
+                    Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
+
+                    if (results[0] < item.getActionRadiusMeters().doubleValue()) {
+
+                        DialogFragment fragment = new EggDialogFragment();
+                        Bundle args = new Bundle();
+                        args.putString("title", item.getTitle());
+                        fragment.setArguments(args);
+
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     @Override
