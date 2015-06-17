@@ -9,10 +9,11 @@ import android.widget.TextView;
 
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseUser;
 
 public class UserListActivity extends Activity
 {
-    private ParseQueryAdapter<Egg> eggQueryAdapter;
+    private ParseQueryAdapter<ParseUser> userQueryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,41 +22,41 @@ public class UserListActivity extends Activity
         setContentView(R.layout.activity_list);
 
         // Set up a customized query
-        ParseQueryAdapter.QueryFactory<Egg> factory = new ParseQueryAdapter.QueryFactory<Egg>()
+        ParseQueryAdapter.QueryFactory<ParseUser> factory = new ParseQueryAdapter.QueryFactory<ParseUser>()
         {
-            public ParseQuery<Egg> create()
+            public ParseQuery<ParseUser> create()
             {
-                ParseQuery<Egg> query = Egg.getQuery();
-                query.orderByDescending("createdAt");
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.orderByDescending("username");
                 return query;
             }
         };
 
         // Set up the query adapter
-        eggQueryAdapter = new ParseQueryAdapter<Egg>(this, factory)
+        userQueryAdapter = new ParseQueryAdapter<ParseUser>(this, factory)
         {
             @Override
-            public View getItemView(Egg item, View view, ViewGroup parent)
+            public View getItemView(ParseUser item, View view, ViewGroup parent)
             {
                 if(view == null) {
                     view = View.inflate(getContext(), R.layout.list_item, null);
                 }
 
-                TextView contentView = (TextView) view.findViewById(R.id.list_item_title);
-                TextView usernameView = (TextView) view.findViewById(R.id.list_item_points);
-                contentView.setText(item.getTitle());
-                usernameView.setText(item.getPoints().toString());
+                TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
+                TextView pointsView = (TextView) view.findViewById(R.id.list_item_points);
+                titleView.setText(item.getUsername());
+                pointsView.setText(item.getNumber("points").toString());
 
                 return view;
             }
         };
 
-        eggQueryAdapter.setAutoload(false);
-        eggQueryAdapter.setPaginationEnabled(false);
+        userQueryAdapter.setAutoload(false);
+        userQueryAdapter.setPaginationEnabled(false);
 
         // Attach the query adapter to the view
         ListView postsListView = (ListView) findViewById(R.id.list);
-        postsListView.setAdapter(eggQueryAdapter);
+        postsListView.setAdapter(userQueryAdapter);
     }
 
     /*
@@ -63,7 +64,7 @@ public class UserListActivity extends Activity
      */
     private void doListQuery()
     {
-        eggQueryAdapter.loadObjects();
+        userQueryAdapter.loadObjects();
     }
 
     /*

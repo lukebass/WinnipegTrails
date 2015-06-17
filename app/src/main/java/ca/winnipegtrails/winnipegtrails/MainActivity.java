@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private void findEggs()
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
-        mapQuery.orderByDescending("createdAt");
+        mapQuery.orderByDescending("title");
 
         mapQuery.findInBackground(new FindCallback<Egg>()
         {
@@ -132,7 +132,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private void doMapQuery()
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
-        mapQuery.orderByDescending("createdAt");
+        mapQuery.orderByDescending("title");
 
         mapQuery.findInBackground(new FindCallback<Egg>()
         {

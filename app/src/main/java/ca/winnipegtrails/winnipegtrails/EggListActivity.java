@@ -26,7 +26,7 @@ public class EggListActivity extends Activity
             public ParseQuery<Egg> create()
             {
                 ParseQuery<Egg> query = Egg.getQuery();
-                query.orderByDescending("createdAt");
+                query.orderByDescending("title");
                 return query;
             }
         };
@@ -41,10 +41,10 @@ public class EggListActivity extends Activity
                     view = View.inflate(getContext(), R.layout.list_item, null);
                 }
 
-                TextView contentView = (TextView) view.findViewById(R.id.list_item_title);
-                TextView usernameView = (TextView) view.findViewById(R.id.list_item_points);
-                contentView.setText(item.getTitle());
-                usernameView.setText(item.getPoints().toString());
+                TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
+                TextView pointsView = (TextView) view.findViewById(R.id.list_item_points);
+                titleView.setText(item.getTitle());
+                pointsView.setText(item.getPoints().toString());
 
                 return view;
             }
