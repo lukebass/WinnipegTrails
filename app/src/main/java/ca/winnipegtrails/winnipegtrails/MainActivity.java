@@ -60,23 +60,25 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
     private void findEggs()
     {
-        Location currentLocation = getLocation();
-        if(currentLocation == null) {
-            return;
-        }
-
         ParseQuery<Egg> mapQuery = Egg.getQuery();
         mapQuery.orderByDescending("createdAt");
 
-        mapQuery.findInBackground(new FindCallback<Egg>() {
+        mapQuery.findInBackground(new FindCallback<Egg>()
+        {
             @Override
-            public void done(List<Egg> objects, ParseException e) {
+            public void done(List<Egg> objects, ParseException e)
+            {
                 if (e != null) {
 
                     if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
                     }
 
+                    return;
+                }
+
+                Location currentLocation = getLocation();
+                if(currentLocation == null) {
                     return;
                 }
 
@@ -112,11 +114,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-
-        Location currentLocation = getLocation();
-        if(currentLocation != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
-        }
     }
 
     /*
@@ -170,8 +167,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     /*
      * Get the current location
      */
-    private Location getLocation() {
-
+    private Location getLocation()
+    {
         if(googleApiClient.isConnected()) {
             return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         }
@@ -252,6 +249,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         if(WinnipegTrailsApplication.APPDEBUG) {
             // In debug mode, log the status
             Log.d(WinnipegTrailsApplication.APPTAG, "Connected to location services");
+        }
+
+        Location currentLocation = getLocation();
+        if(currentLocation != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
         }
     }
 
