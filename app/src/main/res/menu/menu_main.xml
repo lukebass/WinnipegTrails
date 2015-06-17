@@ -8,4 +8,8 @@
         android:title="@string/action_leaderboard"
         android:orderInCategory="150"
         android:showAsAction="never" />
+    <item android:id="@+id/action_login"
+        android:title="@string/login"
+        android:orderInCategory="150"
+        android:showAsAction="never" />
 </menu>

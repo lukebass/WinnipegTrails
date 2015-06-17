@@ -16,6 +16,7 @@ import com.parse.SignUpCallback;
 public class SignUpActivity extends Activity
 {
     private EditText usernameEdit;
+    private EditText emailEdit;
     private EditText passwordEdit;
     private EditText passwordAgainEdit;
 
@@ -27,6 +28,7 @@ public class SignUpActivity extends Activity
 
         // Set up the sign up form
         usernameEdit = (EditText) findViewById(R.id.username);
+        emailEdit = (EditText) findViewById(R.id.email);
         passwordEdit = (EditText) findViewById(R.id.password);
         passwordAgainEdit = (EditText) findViewById(R.id.password_again);
 
@@ -44,6 +46,7 @@ public class SignUpActivity extends Activity
     private void signup()
     {
         String username = usernameEdit.getText().toString().trim();
+        String email = emailEdit.getText().toString().trim();
         String password = passwordEdit.getText().toString().trim();
         String passwordAgain = passwordAgainEdit.getText().toString().trim();
 
@@ -55,6 +58,12 @@ public class SignUpActivity extends Activity
 
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_username));
+        }
+
+        if(email.length() == 0) {
+
+            validationError = true;
+            validationErrorMessage.append(getString(R.string.error_blank_email));
         }
 
         if(password.length() == 0) {
@@ -98,6 +107,7 @@ public class SignUpActivity extends Activity
         // Set up a new Parse user
         ParseUser user = new ParseUser();
         user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(password);
 
         // Call the Parse signup method

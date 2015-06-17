@@ -22,7 +22,7 @@ public class LoginActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_login);
 
         // Set up the log in form
         usernameEdit = (EditText) findViewById(R.id.username);
@@ -35,6 +35,18 @@ public class LoginActivity extends Activity
             public void onClick(View view)
             {
                 login();
+            }
+        });
+
+        // Set up the sign up button click handler
+        Button signupButton = (Button) findViewById(R.id.signup_button);
+        signupButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }

@@ -209,6 +209,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             case R.id.action_leaderboard:
                 startActivity(new Intent(this, UserListActivity.class));
                 return true;
+            case R.id.action_login:
+                startActivity(new Intent(this, LoginActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
