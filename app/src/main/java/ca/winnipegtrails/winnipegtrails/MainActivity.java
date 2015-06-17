@@ -70,14 +70,16 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMyLocationEnabled(true);
-        
+
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         Location currentLocation = getLocation();
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
+        if(currentLocation != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
+        }
     }
 
     /*
@@ -224,7 +226,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             Log.d(WinnipegTrailsApplication.APPTAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
         }
     }
-
 
     @Override
     public void onConnectionSuspended(int cause)

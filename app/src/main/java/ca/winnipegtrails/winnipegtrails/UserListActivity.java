@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
-public class ListActivity extends Activity
+public class UserListActivity extends Activity
 {
     private ParseQueryAdapter<Egg> eggQueryAdapter;
 
