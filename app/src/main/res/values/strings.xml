@@ -23,5 +23,6 @@
     <string name="login">Log in</string>
     <string name="scan">Scan</string>
     <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <string name="no_location_detected">Could not detect your location.</string>
 </resources>

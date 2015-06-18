@@ -22,10 +22,20 @@ public class EggDialogFragment extends DialogFragment
         builder.setTitle(title)
                 .setView(inflater.inflate(R.layout.dialog_egg, null))
                 // Add action buttons
-                .setPositiveButton(R.string.submit, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.submit, new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
                         // Evaluate the form
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        EggDialogFragment.this.getDialog().cancel();
                     }
                 });
 
