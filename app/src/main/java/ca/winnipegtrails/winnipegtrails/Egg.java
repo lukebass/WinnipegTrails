@@ -1,6 +1,7 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -59,6 +60,26 @@ public class Egg extends ParseObject
     public void setActionRadiusMeters(Number value)
     {
         put("action_radius_meters", value);
+    }
+
+    public ParseFile getLargeImageFile()
+    {
+        return getParseFile("large_image_file");
+    }
+
+    public void setLargeImageFile(ParseFile value)
+    {
+        put("large_image_file", value);
+    }
+
+    public ParseFile getSmallImageFile()
+    {
+        return getParseFile("small_image_file");
+    }
+
+    public void setSmallImageFile(ParseFile value)
+    {
+        put("small_image_file", value);
     }
 
     public static ParseQuery<Egg> getQuery()

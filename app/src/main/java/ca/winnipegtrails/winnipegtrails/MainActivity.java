@@ -92,14 +92,15 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     float[] results = new float[1];
                     Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
-                    if(results[0] < item.getActionRadiusMeters().doubleValue()) {
+                    if(results[0] < item.getActionRadiusMeters().floatValue()) {
 
                         if(ParseUser.getCurrentUser() != null) {
-
-                            DialogFragment fragment = new EggDialogFragment();
+                            
+                            DialogFragment eggDialog = new EggDialogFragment();
                             Bundle args = new Bundle();
                             args.putString("title", item.getTitle());
-                            fragment.setArguments(args);
+                            eggDialog.setArguments(args);
+                            eggDialog.show(getFragmentManager(), "eggDialog");
                         }
                         else {
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));

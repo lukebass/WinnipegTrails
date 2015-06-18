@@ -20,6 +20,9 @@ public class WinnipegTrailsApplication extends Application
         super.onCreate();
 
         ParseObject.registerSubclass(Egg.class);
+        ParseObject.registerSubclass(UserEggLinks.class);
+        ParseObject.registerSubclass(Question.class);
+        ParseObject.registerSubclass(QuestionUserLinks.class);
         Parse.initialize(this, "Bb7WJJOc7201FlMPXR7X2gg2q6kh84BkFUfo4oXk", "zSy0YCTwt13AGFm36QouRR06TT4LbB86c2q2g3uR");
         ParseACL defaultACL = new ParseACL();
         defaultACL.setPublicReadAccess(true);
