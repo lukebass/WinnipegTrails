@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         {
             public void onClick(View view)
             {
-                findEggs();
+                eggQuery(true);
             }
         });
 
@@ -60,70 +60,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
-
-    private void findEggs()
-    {
-        ParseQuery<Egg> mapQuery = Egg.getQuery();
-        mapQuery.orderByDescending("title");
-
-        mapQuery.findInBackground(new FindCallback<Egg>()
-        {
-            @Override
-            public void done(List<Egg> objects, ParseException e)
-            {
-                if(e != null) {
-
-                    if(WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
-                    }
-
-                    return;
-                }
-
-                Location currentLocation = getLocation();
-                if(currentLocation == null) {
-                    return;
-                }
-
-                // Loop through the results of the search
-                for(Egg item : objects) {
-
-                    float[] results = new float[1];
-                    Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
-
-                    if(results[0] < item.getActionRadiusMeters().floatValue()) {
-
-                        ParseUser currentUser = ParseUser.getCurrentUser();
-                        if(currentUser != null) {
-
-                            if(currentUser.getNumber("points") == null) {
-                                currentUser.put("points", item.getPoints().intValue());
-                            }
-                            else {
-                                currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
-                            }
-
-                            // Save the user's new point value
-                            currentUser.saveInBackground();
-
-                            // Launch the egg found dialog
-                            DialogFragment eggDialog = new EggDialogFragment();
-                            Bundle args = new Bundle();
-                            args.putString("id", item.getObjectId());
-                            args.putString("title", item.getTitle());
-                            eggDialog.setArguments(args);
-                            eggDialog.show(getFragmentManager(), "eggDialog");
-                        }
-                        else {
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        }
-
-                        break;
-                    }
-                }
-            }
-        });
     }
 
     @Override
@@ -138,6 +74,51 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    private void findEggs(List<Egg> objects)
+    {
+        Location currentLocation = getLocation();
+        if(currentLocation == null) {
+            return;
+        }
+
+        // Loop through the results of the search
+        for(Egg item : objects) {
+
+            float[] results = new float[1];
+            Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
+
+            if(results[0] < item.getActionRadiusMeters().floatValue()) {
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if(currentUser != null) {
+
+                    if(currentUser.getNumber("points") == null) {
+                        currentUser.put("points", item.getPoints().intValue());
+                    }
+                    else {
+                        currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
+                    }
+
+                    // Save the user's new point value
+                    currentUser.saveInBackground();
+
+                    // Launch the egg found dialog
+                    DialogFragment eggDialog = new EggDialogFragment();
+                    Bundle args = new Bundle();
+                    args.putString("id", item.getObjectId());
+                    args.putString("title", item.getTitle());
+                    eggDialog.setArguments(args);
+                    eggDialog.show(getFragmentManager(), "eggDialog");
+                }
+                else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+
+                break;
+            }
+        }
     }
 
     private void placeEggs(List<Egg> objects)
@@ -169,7 +150,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     /*
      * Set up the query to update the map view
      */
-    private void eggQuery()
+    private void eggQuery(final Boolean find)
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
         mapQuery.orderByDescending("title");
@@ -188,7 +169,12 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     return;
                 }
 
-                placeEggs(objects);
+                if(find) {
+                    findEggs(objects);
+                }
+                else {
+                    placeEggs(objects);
+                }
             }
         });
     }
@@ -243,7 +229,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     protected void onResume()
     {
         super.onResume();
-        eggQuery();
+        eggQuery(false);
     }
 
     /**
