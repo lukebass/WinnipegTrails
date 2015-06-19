@@ -26,7 +26,7 @@ public class EggListActivity extends Activity
             public ParseQuery<Egg> create()
             {
                 ParseQuery<Egg> query = Egg.getQuery();
-                query.orderByDescending("title");
+                query.orderByAscending("title");
                 return query;
             }
         };

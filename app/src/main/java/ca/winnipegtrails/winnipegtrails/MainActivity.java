@@ -152,10 +152,10 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
      */
     private void eggQuery(final Boolean find)
     {
-        ParseQuery<Egg> mapQuery = Egg.getQuery();
-        mapQuery.orderByDescending("title");
+        ParseQuery<Egg> eggQuery = Egg.getQuery();
+        eggQuery.orderByDescending("title");
 
-        mapQuery.findInBackground(new FindCallback<Egg>()
+        eggQuery.findInBackground(new FindCallback<Egg>()
         {
             @Override
             public void done(List<Egg> objects, ParseException e)
@@ -163,7 +163,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 if(e != null) {
 
                     if(WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for map eggs.", e);
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
                     }
 
                     return;

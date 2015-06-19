@@ -27,7 +27,7 @@ public class UserListActivity extends Activity
             public ParseQuery<ParseUser> create()
             {
                 ParseQuery<ParseUser> query = ParseUser.getQuery();
-                query.orderByDescending("username");
+                query.orderByDescending("points");
                 return query;
             }
         };
