@@ -94,10 +94,23 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
                     if(results[0] < item.getActionRadiusMeters().floatValue()) {
 
-                        if(ParseUser.getCurrentUser() != null) {
-                            
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        if(currentUser != null) {
+
+                            if(currentUser.getNumber("points") == null) {
+                                currentUser.put("points", item.getPoints().intValue());
+                            }
+                            else {
+                                currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
+                            }
+
+                            // Save the user's new point value
+                            currentUser.saveInBackground();
+
+                            // Launch the egg found dialog
                             DialogFragment eggDialog = new EggDialogFragment();
                             Bundle args = new Bundle();
+                            args.putString("id", item.getObjectId());
                             args.putString("title", item.getTitle());
                             eggDialog.setArguments(args);
                             eggDialog.show(getFragmentManager(), "eggDialog");
@@ -124,13 +137,39 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    private void placeEggs(List<Egg> objects)
+    {
+        // Loop through the results of the search
+        for(Egg item : objects) {
+
+            // Check for an existing marker for this item
+            Marker oldMarker = mapMarkers.get(item.getObjectId());
+            if(oldMarker != null) {
+                // In range marker already exists, skip adding it
+                continue;
+            }
+
+            // Set up the map marker's location
+            // Display a green marker with the item information
+            MarkerOptions markerOpts = new MarkerOptions()
+                    .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
+                    .title(item.getTitle())
+                    .snippet(item.getPoints().toString())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+            // Add a new marker
+            Marker marker = googleMap.addMarker(markerOpts);
+            mapMarkers.put(item.getObjectId(), marker);
+        }
     }
 
     /*
      * Set up the query to update the map view
      */
-    private void doMapQuery()
+    private void eggQuery()
     {
         ParseQuery<Egg> mapQuery = Egg.getQuery();
         mapQuery.orderByDescending("title");
@@ -149,28 +188,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     return;
                 }
 
-                // Loop through the results of the search
-                for(Egg item : objects) {
-
-                    // Check for an existing marker for this item
-                    Marker oldMarker = mapMarkers.get(item.getObjectId());
-                    if(oldMarker != null) {
-                        // In range marker already exists, skip adding it
-                        continue;
-                    }
-
-                    // Set up the map marker's location
-                    // Display a green marker with the item information
-                    MarkerOptions markerOpts = new MarkerOptions()
-                            .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
-                            .title(item.getTitle())
-                            .snippet(item.getPoints().toString())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-
-                    // Add a new marker
-                    Marker marker = googleMap.addMarker(markerOpts);
-                    mapMarkers.put(item.getObjectId(), marker);
-                }
+                placeEggs(objects);
             }
         });
     }
@@ -225,7 +243,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     protected void onResume()
     {
         super.onResume();
-        doMapQuery();
+        eggQuery();
     }
 
     /**
@@ -269,7 +287,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         Location currentLocation = getLocation();
         if(currentLocation != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
         }
     }
 
