@@ -29,8 +29,8 @@ public class LoginActivity extends Activity
         passwordEdit = (EditText) findViewById(R.id.password);
 
         // Set up the submit button click handler
-        Button actionButton = (Button) findViewById(R.id.action_button);
-        actionButton.setOnClickListener(new View.OnClickListener()
+        Button loginButton = (Button) findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {

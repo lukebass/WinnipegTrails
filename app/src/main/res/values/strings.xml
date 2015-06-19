@@ -25,4 +25,5 @@
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="no_location_detected">Could not detect your location.</string>
+    <string name="no_eggs_found">No gems are within range of you.</string>
 </resources>

@@ -1,7 +1,6 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -83,6 +82,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             return;
         }
 
+        Boolean found = false;
         // Loop through the results of the search
         for(Egg item : objects) {
 
@@ -90,6 +90,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
             if(results[0] < item.getActionRadiusMeters().floatValue()) {
+
+                found = true;
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if(currentUser != null) {
@@ -104,20 +106,21 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     // Save the user's new point value
                     currentUser.saveInBackground();
 
-                    // Launch the egg found dialog
-                    DialogFragment eggDialog = new EggDialogFragment();
-                    Bundle args = new Bundle();
-                    args.putString("id", item.getObjectId());
-                    args.putString("title", item.getTitle());
-                    eggDialog.setArguments(args);
-                    eggDialog.show(getFragmentManager(), "eggDialog");
+                    // Launch the egg activity
+                    Intent intent = new Intent(this, EggActivity.class);
+                    intent.putExtra("id", item.getObjectId());
+                    startActivity(intent);
                 }
                 else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(this, LoginActivity.class));
                 }
 
                 break;
             }
+        }
+
+        if(!found) {
+            Toast.makeText(this, R.string.no_eggs_found, Toast.LENGTH_LONG).show();
         }
     }
 
