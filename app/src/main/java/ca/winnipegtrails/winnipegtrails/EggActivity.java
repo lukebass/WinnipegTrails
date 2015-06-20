@@ -12,8 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +84,7 @@ public class EggActivity extends Activity
         LinearLayout egg = (LinearLayout) findViewById(R.id.egg);
 
         // Loop through the results of the search
-        for(Question item : objects) {
+        for(final Question item : objects) {
 
             // add text view
             TextView question = new TextView(this);
@@ -90,13 +92,36 @@ public class EggActivity extends Activity
             egg.addView(question);
 
             // add edit text
-            EditText answer = new EditText(this);
+            final EditText answer = new EditText(this);
             answer.setInputType(InputType.TYPE_CLASS_TEXT);
             answer.setMaxLines(1);
 
-            int id = answer.generateViewId();
-            questionMap.put(id, item.getObjectId());
-            answer.setId(id);
+            //answer.setId(Integer.getInteger(item.getObjectId()));
+            //questionMap.put(Integer.getInteger(item.getObjectId()), item.getObjectId());
+
+            ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
+            questionUserQuery.whereEqualTo("question", item);
+            questionUserQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+
+            questionUserQuery.getFirstInBackground(new GetCallback<QuestionUserLinks>()
+            {
+                public void done(QuestionUserLinks object, ParseException e)
+                {
+                    if(e != null) {
+
+                        if(WinnipegTrailsApplication.APPDEBUG) {
+                            Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user questions", e);
+                        }
+
+                        return;
+                    }
+
+                    if(object != null) {
+                        answer.setText(item.getAnswer());
+                        answer.setEnabled(false);
+                    }
+                }
+            });
 
             egg.addView(answer);
         }

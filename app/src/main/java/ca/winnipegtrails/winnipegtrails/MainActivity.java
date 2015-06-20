@@ -98,8 +98,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 if(currentUser != null) {
 
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
-                    userEggQuery.whereEqualTo("egg", item);
                     userEggQuery.whereEqualTo("user", currentUser);
+                    userEggQuery.whereEqualTo("egg", item);
 
                     userEggQuery.getFirstInBackground(new GetCallback<UserEggLinks>()
                     {
