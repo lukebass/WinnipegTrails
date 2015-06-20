@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -84,7 +85,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         Boolean found = false;
         // Loop through the results of the search
-        for(Egg item : objects) {
+        for(final Egg item : objects) {
 
             float[] results = new float[1];
             Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
@@ -93,18 +94,40 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
                 found = true;
 
-                ParseUser currentUser = ParseUser.getCurrentUser();
+                final ParseUser currentUser = ParseUser.getCurrentUser();
                 if(currentUser != null) {
 
-                    if(currentUser.getNumber("points") == null) {
-                        currentUser.put("points", item.getPoints().intValue());
-                    }
-                    else {
-                        currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
-                    }
+                    ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
+                    userEggQuery.whereEqualTo("egg", item);
+                    userEggQuery.whereEqualTo("user", currentUser);
 
-                    // Save the user's new point value
-                    currentUser.saveInBackground();
+                    userEggQuery.getFirstInBackground(new GetCallback<UserEggLinks>()
+                    {
+                        public void done(UserEggLinks object, ParseException e)
+                        {
+                            if(e != null) {
+
+                                if (WinnipegTrailsApplication.APPDEBUG) {
+                                    Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
+                                }
+
+                                return;
+                            }
+
+                            if(object == null) {
+
+                                if(currentUser.getNumber("points") == null) {
+                                    currentUser.put("points", item.getPoints().intValue());
+                                }
+                                else {
+                                    currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
+                                }
+
+                                // Save the user's new point value
+                                currentUser.saveInBackground();
+                           }
+                        }
+                    });
 
                     // Launch the egg activity
                     Intent intent = new Intent(this, EggActivity.class);

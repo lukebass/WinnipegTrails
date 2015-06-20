@@ -38,13 +38,15 @@ public class EggActivity extends Activity
         questionQuery.whereMatchesQuery("egg", innerQuery);
         questionQuery.orderByAscending("question");
 
-        questionQuery.findInBackground(new FindCallback<Question>() {
+        questionQuery.findInBackground(new FindCallback<Question>()
+        {
             @Override
-            public void done(List<Question> objects, ParseException e) {
-                if (e != null) {
+            public void done(List<Question> objects, ParseException e)
+            {
+                if(e != null) {
 
-                    if (WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for questions", e);
+                    if(WinnipegTrailsApplication.APPDEBUG) {
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for egg questions", e);
                     }
 
                     return;
