@@ -81,7 +81,7 @@ public class EggActivity extends Activity
 
     private void populateQuestions(List<Question> objects)
     {
-        LinearLayout egg = (LinearLayout) findViewById(R.id.egg);
+        LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
         // Loop through the results of the search
         for(final Question item : objects) {
@@ -89,7 +89,7 @@ public class EggActivity extends Activity
             // add text view
             TextView question = new TextView(this);
             question.setText(item.getQuestion());
-            egg.addView(question);
+            questions.addView(question);
 
             // add edit text
             final EditText answer = new EditText(this);
@@ -123,7 +123,7 @@ public class EggActivity extends Activity
                 }
             });
 
-            egg.addView(answer);
+            questions.addView(answer);
         }
     }
 
