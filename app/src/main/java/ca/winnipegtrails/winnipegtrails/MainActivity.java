@@ -116,6 +116,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
                             if(object == null) {
 
+                                UserEggLinks userEggLink = new UserEggLinks();
+                                userEggLink.put("user", currentUser);
+                                userEggLink.put("egg", item);
+                                userEggLink.saveInBackground();
+
                                 if(currentUser.getNumber("points") == null) {
                                     currentUser.put("points", item.getPoints().intValue());
                                 }
