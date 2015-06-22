@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class EggActivity extends Activity
 {
-    private final Map<Integer, String> questionMap = new HashMap<>();
+    private final Map<Integer, Question> questionMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,6 +83,7 @@ public class EggActivity extends Activity
     {
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
+        int i = 1;
         // Loop through the results of the search
         for(final Question item : objects) {
 
@@ -95,9 +96,8 @@ public class EggActivity extends Activity
             final EditText answer = new EditText(this);
             answer.setInputType(InputType.TYPE_CLASS_TEXT);
             answer.setMaxLines(1);
-
-            //answer.setId(Integer.getInteger(item.getObjectId()));
-            //questionMap.put(Integer.getInteger(item.getObjectId()), item.getObjectId());
+            answer.setId(i);
+            questionMap.put(i, item);
 
             ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
             questionUserQuery.whereEqualTo("question", item);
@@ -127,7 +127,31 @@ public class EggActivity extends Activity
         }
     }
 
-    private void submit() {
+    private void submit()
+    {
+        LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
+        for(int i = 0; i < questions.getChildCount(); i++) {
 
+            View child = questions.getChildAt(i);
+            if(child instanceof EditText) {
+
+                EditText userAnswer = (EditText) child;
+
+                if(!userAnswer.isEnabled()) {
+                    continue;
+                }
+
+                Question question = questionMap.get(userAnswer.getId());
+                if(question.getAnswer().toLowerCase().equals(userAnswer.getText().toString().toLowerCase().trim())) {
+
+                    QuestionUserLinks questionUserLink = new QuestionUserLinks();
+                    questionUserLink.put("question", question);
+                    questionUserLink.put("user", ParseUser.getCurrentUser());
+                    questionUserLink.saveInBackground();
+                }
+            }
+        }
+
+        //Continue
     }
 }
