@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class EggActivity extends Activity
 {
+    private Egg egg;
     private final Map<Integer, Question> questionMap = new HashMap<>();
 
     @Override
@@ -34,27 +35,23 @@ public class EggActivity extends Activity
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
 
-        ParseQuery<Egg> innerQuery = Egg.getQuery();
-        innerQuery.whereEqualTo("objectId", id);
-        ParseQuery<Question> questionQuery = Question.getQuery();
-        questionQuery.whereMatchesQuery("egg", innerQuery);
-        questionQuery.orderByAscending("question");
-
-        questionQuery.findInBackground(new FindCallback<Question>()
+        // Get egg object
+        ParseQuery<Egg> eggQuery = Egg.getQuery();
+        eggQuery.getInBackground(id, new GetCallback<Egg>()
         {
-            @Override
-            public void done(List<Question> objects, ParseException e)
+            public void done(Egg object, ParseException e)
             {
                 if(e != null) {
 
                     if(WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for egg questions", e);
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for an egg", e);
                     }
 
                     return;
                 }
 
-                populateQuestions(objects);
+                egg = object;
+                getQuestions();
             }
         });
 
@@ -79,8 +76,35 @@ public class EggActivity extends Activity
         });
     }
 
-    private void populateQuestions(List<Question> objects)
+    private void getQuestions()
     {
+        ParseQuery<Question> questionQuery = Question.getQuery();
+        questionQuery.whereEqualTo("egg", egg);
+        questionQuery.orderByAscending("question");
+
+        questionQuery.findInBackground(new FindCallback<Question>()
+        {
+            @Override
+            public void done(List<Question> objects, ParseException e)
+            {
+                if(e != null) {
+
+                    if(WinnipegTrailsApplication.APPDEBUG) {
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for egg questions", e);
+                    }
+
+                    return;
+                }
+
+                populateEggView(objects);
+            }
+        });
+    }
+
+    private void populateEggView(List<Question> objects)
+    {
+        // Update egg information
+
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
         int i = 1;
@@ -152,6 +176,9 @@ public class EggActivity extends Activity
             }
         }
 
-        //Continue
+        // Launch the egg activity
+        Intent intent = new Intent(this, EggActivity.class);
+        intent.putExtra("id", egg.getObjectId());
+        startActivity(intent);
     }
 }
