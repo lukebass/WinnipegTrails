@@ -322,7 +322,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     {
         if(WinnipegTrailsApplication.APPDEBUG) {
             // In debug mode, log the status
-            Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended");
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended: Cause = " + cause);
         }
 
         googleApiClient.connect();

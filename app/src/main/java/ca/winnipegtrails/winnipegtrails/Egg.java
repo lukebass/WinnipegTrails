@@ -62,22 +62,22 @@ public class Egg extends ParseObject
         put("action_radius_meters", value);
     }
 
-    public ParseFile getLargeImageFile()
+    public ParseFile getLargeImage()
     {
         return getParseFile("large_image_file");
     }
 
-    public void setLargeImageFile(ParseFile value)
+    public void setLargeImage(ParseFile value)
     {
         put("large_image_file", value);
     }
 
-    public ParseFile getSmallImageFile()
+    public ParseFile getSmallImage()
     {
         return getParseFile("small_image_file");
     }
 
-    public void setSmallImageFile(ParseFile value)
+    public void setSmallImage(ParseFile value)
     {
         put("small_image_file", value);
     }

@@ -103,8 +103,11 @@ public class EggActivity extends Activity
 
     private void populateEggView(List<Question> objects)
     {
-        // Update egg information
+        // add text view
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(egg.getTitle());
 
+        // Update egg information
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
         int i = 1;
