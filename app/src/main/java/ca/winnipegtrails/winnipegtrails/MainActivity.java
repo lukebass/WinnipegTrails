@@ -37,7 +37,7 @@ import java.util.Map;
 public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener
 {
     private GoogleMap googleMap;
-    private final Map<String, Marker> mapMarkers = new HashMap<>();
+    private Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
 
     @Override

@@ -24,13 +24,16 @@ import java.util.Map;
 public class EggActivity extends Activity
 {
     private Egg egg;
-    private final Map<Integer, Question> questionMap = new HashMap<>();
+    private Map<Integer, Question> questionMap = new HashMap<>();
+    private ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_egg);
+
+        currentUser = ParseUser.getCurrentUser();
 
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
@@ -130,7 +133,7 @@ public class EggActivity extends Activity
 
             ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
             questionUserQuery.whereEqualTo("question", item);
-            questionUserQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+            questionUserQuery.whereEqualTo("user", currentUser);
 
             questionUserQuery.getFirstInBackground(new GetCallback<QuestionUserLinks>()
             {
@@ -175,8 +178,18 @@ public class EggActivity extends Activity
 
                     QuestionUserLinks questionUserLink = new QuestionUserLinks();
                     questionUserLink.put("question", question);
-                    questionUserLink.put("user", ParseUser.getCurrentUser());
+                    questionUserLink.put("user", currentUser);
                     questionUserLink.saveInBackground();
+
+                    if(currentUser.getNumber("points") == null) {
+                        currentUser.put("points", question.getPoints().intValue());
+                    }
+                    else {
+                        currentUser.put("points", currentUser.getNumber("points").intValue() + question.getPoints().intValue());
+                    }
+
+                    // Save the user's new point value
+                    currentUser.saveInBackground();
                 }
             }
         }
