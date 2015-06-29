@@ -124,7 +124,9 @@ public class EggActivity extends Activity
             answer.setInputType(InputType.TYPE_CLASS_TEXT);
             answer.setMaxLines(1);
             answer.setId(i);
+
             questionMap.put(i, item);
+            i++;
 
             ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
             questionUserQuery.whereEqualTo("question", item);
