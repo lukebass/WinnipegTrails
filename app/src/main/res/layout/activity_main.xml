@@ -13,13 +13,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/scan_button"
+    <TextView
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:text="@string/scan"
+        android:layout_marginTop="20dp"
+        android:textSize="28sp"
+        android:layout_gravity="center_horizontal|top" />
+
+    <ImageView
+        android:id="@+id/center_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/center"
+        android:layout_gravity="left|bottom" />
+
+    <ImageView
+        android:id="@+id/scan_button"
+        android:layout_width="210dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/scan"
         android:layout_gravity="center_horizontal|bottom" />
+
+    <ImageView
+        android:id="@+id/bag_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/bag"
+        android:layout_gravity="right|bottom" />
 </FrameLayout>

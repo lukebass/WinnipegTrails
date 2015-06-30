@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,8 +47,33 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TextView score = (TextView) findViewById(R.id.score);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if(currentUser != null && currentUser.getNumber("points") != null) {
+
+            int points = currentUser.getNumber("points").intValue();
+            int length = String.valueOf(points).length();
+
+            if(length == 1) {
+                score.setText("SCORE: 000" + points);
+            }
+            else if(length == 2) {
+                score.setText("SCORE: 00" + points);
+            }
+            else if(length == 3) {
+                score.setText("SCORE: 0" + points);
+            }
+            else {
+                score.setText(points);
+            }
+        }
+        else {
+            score.setText("SCORE: 0000");
+        }
+
         // Set up the submit button click handler
-        Button scanButton = (Button) findViewById(R.id.scan_button);
+        ImageView scanButton = (ImageView) findViewById(R.id.scan_button);
         scanButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
