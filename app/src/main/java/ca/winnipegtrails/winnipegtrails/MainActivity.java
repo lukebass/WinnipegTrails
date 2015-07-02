@@ -38,6 +38,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private GoogleMap googleMap;
     private Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
+    private Boolean link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -146,6 +147,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 final ParseUser currentUser = ParseUser.getCurrentUser();
                 if(currentUser != null) {
 
+                    link = false;
+
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
                     userEggQuery.whereEqualTo("user", currentUser);
                     userEggQuery.whereEqualTo("egg", item);
@@ -156,32 +159,36 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                         {
                             if(e != null) {
 
-                                if (WinnipegTrailsApplication.APPDEBUG) {
+                                if(WinnipegTrailsApplication.APPDEBUG) {
                                     Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                                 }
 
                                 return;
                             }
 
-                            if(object == null) {
-
-                                UserEggLinks userEggLink = new UserEggLinks();
-                                userEggLink.put("user", currentUser);
-                                userEggLink.put("egg", item);
-                                userEggLink.saveInBackground();
-
-                                if(currentUser.getNumber("points") == null) {
-                                    currentUser.put("points", item.getPoints().intValue());
-                                }
-                                else {
-                                    currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
-                                }
-
-                                // Save the user's new point value
-                                currentUser.saveInBackground();
-                           }
+                            if(object != null) {
+                                link = true;
+                            }
                         }
                     });
+
+                    if(!link) {
+
+                        UserEggLinks userEggLink = new UserEggLinks();
+                        userEggLink.put("user", currentUser);
+                        userEggLink.put("egg", item);
+                        userEggLink.saveInBackground();
+
+                        if(currentUser.getNumber("points") == null) {
+                            currentUser.put("points", item.getPoints().intValue());
+                        }
+                        else {
+                            currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
+                        }
+
+                        // Save the user's new point value
+                        currentUser.saveInBackground();
+                    }
 
                     // Launch the egg activity
                     Intent intent = new Intent(this, EggActivity.class);
@@ -191,8 +198,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 else {
                     startActivity(new Intent(this, LoginActivity.class));
                 }
-
-                break;
             }
         }
 

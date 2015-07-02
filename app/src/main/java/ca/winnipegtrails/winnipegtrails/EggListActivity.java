@@ -43,9 +43,6 @@ public class EggListActivity extends Activity
                     view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
-                TextView title = (TextView) view.findViewById(R.id.list_item_title);
-                title.setText(item.getTitle());
-
                 ParseImageView image = (ParseImageView) findViewById(R.id.list_item_image);
                 ParseFile imageFile = item.getLargeImage();
 
@@ -56,6 +53,9 @@ public class EggListActivity extends Activity
                 else {
                     image.setImageResource(R.drawable.icon);
                 }
+
+                TextView title = (TextView) view.findViewById(R.id.list_item_title);
+                title.setText(item.getTitle());
 
                 return view;
             }
