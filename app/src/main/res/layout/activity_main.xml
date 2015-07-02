@@ -28,7 +28,7 @@
         android:layout_height="60dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/center"
-        android:layout_gravity="left|bottom" />
+        android:layout_gravity="start|bottom" />
 
     <ImageView
         android:id="@+id/scan_button"
@@ -44,5 +44,5 @@
         android:layout_height="60dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/bag"
-        android:layout_gravity="right|bottom" />
+        android:layout_gravity="end|bottom" />
 </FrameLayout>

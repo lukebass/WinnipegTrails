@@ -25,6 +25,7 @@
         android:layout_marginTop="20dp" >
 
         <TextView
+            android:id="@+id/gem_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gems"
@@ -32,6 +33,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/leaderboard_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/leaderboard"

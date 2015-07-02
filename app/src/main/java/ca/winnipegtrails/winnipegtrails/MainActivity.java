@@ -82,6 +82,15 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             }
         });
 
+        ImageView bagButton = (ImageView) findViewById(R.id.bag_button);
+        bagButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
         buildGoogleApiClient();
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
