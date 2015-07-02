@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -112,7 +114,17 @@ public class EggActivity extends Activity
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(egg.getTitle());
 
-        // Update egg information
+        ParseImageView image = (ParseImageView) findViewById(R.id.image);
+        ParseFile imageFile = egg.getLargeImage();
+
+        if(imageFile != null) {
+            image.setParseFile(imageFile);
+            image.loadInBackground();
+        }
+        else {
+            image.setImageResource(R.drawable.icon);
+        }
+
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
         int i = 1;
