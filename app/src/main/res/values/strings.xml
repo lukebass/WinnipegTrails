@@ -31,4 +31,5 @@
     <string name="no_location_detected">Could not detect your location.</string>
     <string name="no_eggs_found">No gems are within range of you.</string>
     <string name="no_mode_selected">You must select a mode of transport.</string>
+    <string name="found_gem">Well done. You found a hidden gem!</string>
 </resources>

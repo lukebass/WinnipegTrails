@@ -2,9 +2,11 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,9 +25,9 @@ import java.util.Map;
 
 public class EggActivity extends Activity
 {
+    private ParseUser currentUser;
     private Egg egg;
     private Map<Integer, Question> questionMap = new HashMap<>();
-    private ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -120,16 +122,28 @@ public class EggActivity extends Activity
             // add text view
             TextView question = new TextView(this);
             question.setText(item.getQuestion());
-            questions.addView(question);
+            question.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            question.setTypeface(null, Typeface.BOLD);
+
+            LinearLayout.LayoutParams questionParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            questionParams.bottomMargin = convertToPixels(10);
+
+            if(i == 1) {
+                question.setLayoutParams(questionParams);
+            }
+            else {
+                questionParams.topMargin = convertToPixels(10);
+                question.setLayoutParams(questionParams);
+            }
 
             // add edit text
             final EditText answer = new EditText(this);
+            answer.setId(i);
             answer.setInputType(InputType.TYPE_CLASS_TEXT);
             answer.setMaxLines(1);
-            answer.setId(i);
 
-            questionMap.put(i, item);
-            i++;
+            LinearLayout.LayoutParams answerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            answer.setLayoutParams(answerParams);
 
             ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
             questionUserQuery.whereEqualTo("question", item);
@@ -155,7 +169,11 @@ public class EggActivity extends Activity
                 }
             });
 
+            questions.addView(question);
             questions.addView(answer);
+            questionMap.put(i, item);
+
+            i++;
         }
     }
 
@@ -198,5 +216,11 @@ public class EggActivity extends Activity
         Intent intent = new Intent(this, EggActivity.class);
         intent.putExtra("id", egg.getObjectId());
         startActivity(intent);
+    }
+
+    private int convertToPixels(int dp)
+    {
+        float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 }
