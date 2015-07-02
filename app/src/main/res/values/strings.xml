@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Winnipeg Trails</string>
-    <string name="settings">Settings</string>
-    <string name="gems">Hidden Gems</string>
-    <string name="leaderboard">Leaderboard</string>
+    <string name="settings">SETTINGS</string>
+    <string name="gems">HIDDEN GEMS</string>
+    <string name="leaderboard">LEADERBOARD</string>
+    <string name="mode">MODE</string>
+    <string name="notifications">NOTIFICATIONS</string>
+    <string name="faq">FAQ</string>
+    <string name="about">ABOUT THIS APP</string>
+    <string name="manual">VIEW MANUAL</string>
+    <string name="add">ADD GEM OR COMBO</string>
+    <string name="prizes">DONATIONS/PRIZES</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -20,7 +27,7 @@
     <string name="login">Log in</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
-    <string name="mode">PICK YOUR MODE</string>
+    <string name="pick">PICK YOUR MODE</string>
     <string name="walk">WALK</string>
     <string name="skateboard">SKATEBOARD</string>
     <string name="bicycle">BICYCLE</string>
