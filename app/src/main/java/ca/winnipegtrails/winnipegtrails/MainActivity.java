@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,7 +70,15 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             score.setText("SCORE: 0000");
         }
 
-        // Set up the submit button click handler
+        ImageView centerButton = (ImageView) findViewById(R.id.center_button);
+        centerButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                centerMap();
+            }
+        });
+
         ImageView scanButton = (ImageView) findViewById(R.id.scan_button);
         scanButton.setOnClickListener(new View.OnClickListener()
         {
@@ -109,6 +115,14 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    private void centerMap()
+    {
+        Location currentLocation = getLocation();
+        if(currentLocation != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+        }
     }
 
     private void findEggs(List<Egg> objects)
@@ -205,7 +219,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
                     .title(item.getTitle())
                     .snippet(item.getPoints().toString())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
 
             // Add a new marker
             Marker marker = googleMap.addMarker(markerOpts);
@@ -221,24 +235,21 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         ParseQuery<Egg> eggQuery = Egg.getQuery();
         eggQuery.orderByDescending("title");
 
-        eggQuery.findInBackground(new FindCallback<Egg>()
-        {
+        eggQuery.findInBackground(new FindCallback<Egg>() {
             @Override
-            public void done(List<Egg> objects, ParseException e)
-            {
-                if(e != null) {
+            public void done(List<Egg> objects, ParseException e) {
+                if (e != null) {
 
-                    if(WinnipegTrailsApplication.APPDEBUG) {
+                    if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
                     }
 
                     return;
                 }
 
-                if(find) {
+                if (find) {
                     findEggs(objects);
-                }
-                else {
+                } else {
                     placeEggs(objects);
                 }
             }
@@ -256,38 +267,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         else {
             Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
             return null;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_gems:
-                startActivity(new Intent(this, EggListActivity.class));
-                return true;
-            case R.id.action_leaderboard:
-                startActivity(new Intent(this, UserListActivity.class));
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            case R.id.action_login:
-                startActivity(new Intent(this, LoginActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 
