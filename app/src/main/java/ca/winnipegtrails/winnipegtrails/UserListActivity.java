@@ -42,15 +42,15 @@ public class UserListActivity extends Activity
                     view = View.inflate(getContext(), R.layout.list_item_user, null);
                 }
 
-                TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
-                titleView.setText(item.getUsername());
+                TextView title = (TextView) view.findViewById(R.id.list_item_title);
+                title.setText(item.getUsername());
 
-                TextView pointsView = (TextView) view.findViewById(R.id.list_item_points);
+                TextView points = (TextView) view.findViewById(R.id.list_item_points);
                 if(item.getNumber("points") == null) {
-                    pointsView.setText("0");
+                    points.setText("0");
                 }
                 else {
-                    pointsView.setText(item.getNumber("points").toString());
+                    points.setText(item.getNumber("points").toString());
                 }
 
                 return view;

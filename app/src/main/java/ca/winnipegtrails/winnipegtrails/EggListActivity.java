@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
@@ -43,19 +41,16 @@ public class EggListActivity extends Activity
                     view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
-                ParseImageView image = (ParseImageView) findViewById(R.id.list_item_image);
-                ParseFile imageFile = item.getLargeImage();
-
-                if(imageFile != null) {
-                    image.setParseFile(imageFile);
-                    image.loadInBackground();
-                }
-                else {
-                    image.setImageResource(R.drawable.icon);
-                }
-
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
+
+                TextView points = (TextView) view.findViewById(R.id.list_item_points);
+                if(item.getNumber("points") == null) {
+                    points.setText("0");
+                }
+                else {
+                    points.setText(item.getNumber("points").toString());
+                }
 
                 return view;
             }

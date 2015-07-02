@@ -136,7 +136,6 @@ public class EggActivity extends Activity
             question.setTypeface(null, Typeface.BOLD);
 
             LinearLayout.LayoutParams questionParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            questionParams.bottomMargin = convertToPixels(10);
 
             if(i == 1) {
                 question.setLayoutParams(questionParams);

@@ -72,28 +72,22 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         }
 
         ImageView centerButton = (ImageView) findViewById(R.id.center_button);
-        centerButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        centerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 centerMap();
             }
         });
 
         ImageView scanButton = (ImageView) findViewById(R.id.scan_button);
-        scanButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 eggQuery(true);
             }
         });
 
         ImageView bagButton = (ImageView) findViewById(R.id.bag_button);
-        bagButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        bagButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
@@ -163,32 +157,29 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                                     Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                                 }
 
+                                if(e.getCode() == 101) {
+
+                                    UserEggLinks userEggLink = new UserEggLinks();
+                                    userEggLink.put("user", currentUser);
+                                    userEggLink.put("egg", item);
+                                    userEggLink.saveInBackground();
+
+                                    if(currentUser.getNumber("points") == null) {
+                                        currentUser.put("points", item.getPoints().intValue());
+                                    }
+                                    else {
+                                        currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
+                                    }
+
+                                    // Save the user's new point value
+                                    currentUser.saveInBackground();
+                                }
+
                                 return;
                             }
 
-                            if(object != null) {
-                                link = true;
-                            }
                         }
                     });
-
-                    if(!link) {
-
-                        UserEggLinks userEggLink = new UserEggLinks();
-                        userEggLink.put("user", currentUser);
-                        userEggLink.put("egg", item);
-                        userEggLink.saveInBackground();
-
-                        if(currentUser.getNumber("points") == null) {
-                            currentUser.put("points", item.getPoints().intValue());
-                        }
-                        else {
-                            currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
-                        }
-
-                        // Save the user's new point value
-                        currentUser.saveInBackground();
-                    }
 
                     // Launch the egg activity
                     Intent intent = new Intent(this, EggActivity.class);
