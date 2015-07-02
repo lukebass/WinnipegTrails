@@ -43,18 +43,18 @@ public class EggListActivity extends Activity
                     view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
-                TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
-                titleView.setText(item.getTitle());
+                TextView title = (TextView) view.findViewById(R.id.list_item_title);
+                title.setText(item.getTitle());
 
-                ParseImageView imageView = (ParseImageView) findViewById(R.id.list_item_image);
+                ParseImageView image = (ParseImageView) findViewById(R.id.list_item_image);
                 ParseFile imageFile = item.getLargeImage();
 
                 if(imageFile != null) {
-                    imageView.setParseFile(imageFile);
-                    imageView.loadInBackground();
+                    image.setParseFile(imageFile);
+                    image.loadInBackground();
                 }
                 else {
-                    imageView.setImageResource(R.drawable.icon);
+                    image.setImageResource(R.drawable.icon);
                 }
 
                 return view;

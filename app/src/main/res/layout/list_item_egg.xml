@@ -3,8 +3,7 @@
     android:id="@+id/list_item_egg"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp" >
+    android:layout_height="match_parent" >
 
     <com.parse.ParseImageView
         android:id="@+id/list_item_image"
@@ -12,6 +11,8 @@
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/icon"/>
 
     <TextView
@@ -25,6 +26,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="20sp"
         android:textStyle="bold" />
 </RelativeLayout>
