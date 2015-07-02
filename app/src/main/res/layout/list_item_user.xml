@@ -14,7 +14,7 @@
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_toStartOf="@id/list_item_points"
+        android:layout_toStartOf="@+id/list_item_points"
         android:layout_toLeftOf="@id/list_item_points"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -22,7 +22,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/list_item_points"
+        android:id="@id/list_item_points"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
