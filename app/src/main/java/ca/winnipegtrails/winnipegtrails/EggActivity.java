@@ -62,7 +62,6 @@ public class EggActivity extends Activity
             }
         });
 
-        // Set up the submit button click handler
         Button submitButton = (Button) findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener()
         {
@@ -72,8 +71,7 @@ public class EggActivity extends Activity
             }
         });
 
-        // Set up the sign up button click handler
-        Button cancelButton = (Button) findViewById(R.id.cancel_button);
+        TextView cancelButton = (TextView) findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)

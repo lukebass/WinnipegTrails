@@ -29,5 +29,14 @@ public class SettingsActivity extends Activity
                 startActivity(new Intent(SettingsActivity.this, UserListActivity.class));
             }
         });
+
+        TextView cancelButton = (TextView) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            }
+        });
     }
 }
