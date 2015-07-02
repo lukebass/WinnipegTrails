@@ -19,35 +19,39 @@
 
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name=".SignUpActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name=".EggListActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name=".UserListActivity"
             android:label="@string/app_name"
             android:theme="@style/ActionBar" />
 
         <activity
-            android:name=".EggActivity"
+            android:name=".SignUpActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/ActionBar" />
+
+        <activity
+            android:name=".EggListActivity"
+            android:label="@string/gems"
+            android:theme="@style/ActionBar" />
+
+        <activity
+            android:name=".UserListActivity"
+            android:label="@string/leaderboard"
+            android:theme="@style/ActionBar" />
+
+        <activity
+            android:name=".EggActivity"
+            android:theme="@style/NoActionBar" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/NoActionBar" />
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/NoActionBar" />
 
         <activity
             android:name=".ModeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

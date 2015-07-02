@@ -38,13 +38,11 @@ public class EggListActivity extends Activity
             public View getItemView(Egg item, View view, ViewGroup parent)
             {
                 if(view == null) {
-                    view = View.inflate(getContext(), R.layout.list_item, null);
+                    view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
                 TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
-                TextView pointsView = (TextView) view.findViewById(R.id.list_item_points);
                 titleView.setText(item.getTitle());
-                pointsView.setText(item.getPoints().toString());
 
                 return view;
             }

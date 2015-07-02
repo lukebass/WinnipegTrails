@@ -39,7 +39,7 @@ public class UserListActivity extends Activity
             public View getItemView(ParseUser item, View view, ViewGroup parent)
             {
                 if(view == null) {
-                    view = View.inflate(getContext(), R.layout.list_item, null);
+                    view = View.inflate(getContext(), R.layout.list_item_user, null);
                 }
 
                 TextView titleView = (TextView) view.findViewById(R.id.list_item_title);
