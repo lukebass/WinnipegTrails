@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
+
 public class ModeActivity extends Activity
 {
     @Override
@@ -55,6 +57,7 @@ public class ModeActivity extends Activity
     {
         String selectedText = null;
 
+        int j = 0;
         LinearLayout modes = (LinearLayout) findViewById(R.id.modes);
         for(int i = 0; i < modes.getChildCount(); i++) {
 
@@ -67,9 +70,20 @@ public class ModeActivity extends Activity
                     selectedText = mode.getText().toString();
                 }
             }
+
+            j = i;
         }
 
         if(selectedText != null) {
+
+            WinnipegTrailsApplication.setTransportMode(j);
+
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if(currentUser != null) {
+
+                currentUser.put("transport_mode", j);
+                currentUser.saveInBackground();
+            }
 
             // Launch the main activity
             Intent intent = new Intent(this, MainActivity.class);

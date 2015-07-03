@@ -1,6 +1,8 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -13,6 +15,13 @@ public class WinnipegTrailsApplication extends Application
 
     // Debugging tag for the application
     public static final String APPTAG = "WinnipegTrails";
+
+    private static SharedPreferences preferences;
+
+    // Key for saving the transport mode preference
+    private static final String KEY_TRANSPORT_MODE = "transportMode";
+
+    private static final int DEFAULT_TRANSPORT_MODE = 1;
 
     @Override
     public void onCreate()
@@ -27,5 +36,17 @@ public class WinnipegTrailsApplication extends Application
         ParseACL defaultACL = new ParseACL();
         defaultACL.setPublicReadAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
+
+        preferences = getSharedPreferences("ca.winnipegtrails.winnipegtrails", Context.MODE_PRIVATE);
+    }
+
+    public static float getTransportMode()
+    {
+        return preferences.getInt(KEY_TRANSPORT_MODE, DEFAULT_TRANSPORT_MODE);
+    }
+
+    public static void setTransportMode(int value)
+    {
+        preferences.edit().putFloat(KEY_TRANSPORT_MODE, value).apply();
     }
 }
