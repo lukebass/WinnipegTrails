@@ -15,8 +15,10 @@ public class SettingsActivity extends Activity
         setContentView(R.layout.activity_settings);
 
         TextView gemButton = (TextView) findViewById(R.id.gem_button);
-        gemButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        gemButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 startActivity(new Intent(SettingsActivity.this, EggListActivity.class));
             }
         });

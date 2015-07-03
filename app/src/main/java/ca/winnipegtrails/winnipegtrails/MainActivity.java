@@ -38,7 +38,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private GoogleMap googleMap;
     private Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
-    private Boolean link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,22 +71,28 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         }
 
         ImageView centerButton = (ImageView) findViewById(R.id.center_button);
-        centerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        centerButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 centerMap();
             }
         });
 
         ImageView scanButton = (ImageView) findViewById(R.id.scan_button);
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        scanButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 eggQuery(true);
             }
         });
 
         ImageView bagButton = (ImageView) findViewById(R.id.bag_button);
-        bagButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        bagButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
@@ -141,8 +146,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 final ParseUser currentUser = ParseUser.getCurrentUser();
                 if(currentUser != null) {
 
-                    link = false;
-
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
                     userEggQuery.whereEqualTo("user", currentUser);
                     userEggQuery.whereEqualTo("egg", item);
@@ -174,10 +177,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                                     // Save the user's new point value
                                     currentUser.saveInBackground();
                                 }
-
-                                return;
                             }
-
                         }
                     });
 
@@ -231,21 +231,24 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         ParseQuery<Egg> eggQuery = Egg.getQuery();
         eggQuery.orderByDescending("title");
 
-        eggQuery.findInBackground(new FindCallback<Egg>() {
+        eggQuery.findInBackground(new FindCallback<Egg>()
+        {
             @Override
-            public void done(List<Egg> objects, ParseException e) {
-                if (e != null) {
+            public void done(List<Egg> objects, ParseException e)
+            {
+                if(e != null) {
 
-                    if (WinnipegTrailsApplication.APPDEBUG) {
+                    if(WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
                     }
 
                     return;
                 }
 
-                if (find) {
+                if(find) {
                     findEggs(objects);
-                } else {
+                }
+                else {
                     placeEggs(objects);
                 }
             }
