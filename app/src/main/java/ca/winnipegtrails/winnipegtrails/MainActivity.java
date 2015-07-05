@@ -225,7 +225,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
                 int time = Math.round(results[0] / avg);
-                markerOpts.snippet(String.valueOf(time));
+                markerOpts.snippet("Travel: " + String.valueOf(time));
             }
 
             // Add a new marker
