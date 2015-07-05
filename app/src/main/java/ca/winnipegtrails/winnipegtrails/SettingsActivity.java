@@ -2,6 +2,7 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -27,9 +28,11 @@ public class SettingsActivity extends Activity
             Boolean notify = currentUser.getBoolean("notifications");
             if(notify) {
                 notifyButton.setText("YES");
+                notifyButton.setTextColor(Color.GREEN);
             }
             else {
                 notifyButton.setText("NO");
+                notifyButton.setTextColor(Color.RED);
             }
         }
         else {
@@ -62,5 +65,60 @@ public class SettingsActivity extends Activity
                 startActivity(new Intent(SettingsActivity.this, MainActivity.class));
             }
         });
+    }
+
+    public void modeSelected(View view)
+    {
+        TextView mode = (TextView) view;
+        CharSequence modeText = mode.getText();
+
+        int i = 1;
+        String[] types = WinnipegTrailsApplication.types;
+        for(String item : types) {
+
+            if(modeText == item) {
+
+                if(i == 6) {
+                    i = 0;
+                }
+
+                mode.setText(WinnipegTrailsApplication.types[i]);
+                WinnipegTrailsApplication.setTransportMode(i);
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if(currentUser != null) {
+
+                    currentUser.put("transport_mode", i);
+                    currentUser.saveInBackground();
+                }
+
+                break;
+            }
+
+            i++;
+        }
+    }
+
+    public void notifySelected(View view)
+    {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser != null) {
+
+            TextView notify = (TextView) view;
+            CharSequence notifyText = notify.getText();
+
+            if(notifyText == "NO") {
+
+                notify.setText("YES");
+                currentUser.put("notifications", true);
+                currentUser.saveInBackground();
+            }
+            else {
+
+                notify.setText("NO");
+                currentUser.put("notifications", false);
+                currentUser.saveInBackground();
+            }
+        }
     }
 }

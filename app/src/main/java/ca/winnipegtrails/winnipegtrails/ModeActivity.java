@@ -67,11 +67,12 @@ public class ModeActivity extends Activity
                 TextView mode = (TextView) child;
 
                 if(Color.GREEN == mode.getCurrentTextColor()) {
+
                     selectedText = mode.getText().toString();
+                    j = i;
+                    break;
                 }
             }
-
-            j = i;
         }
 
         if(selectedText != null) {

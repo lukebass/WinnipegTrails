@@ -85,6 +85,7 @@
                     android:layout_marginStart="10dp"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:textColor="#ff0000"
                     android:clickable="true"
                     android:onClick="modeSelected" />
             </LinearLayout>
