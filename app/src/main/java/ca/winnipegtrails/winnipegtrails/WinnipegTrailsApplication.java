@@ -18,6 +18,8 @@ public class WinnipegTrailsApplication extends Application
 
     public static final int[] modes = {75, 250, 325, 125, 200, 500};
 
+    public static final String[] types = {"WALK", "SKATEBOARD", "BICYCLE", "WHEELCHAIR", "SKATE", "SKI"};
+
     private static SharedPreferences preferences;
 
     // Key for saving the transport mode preference
