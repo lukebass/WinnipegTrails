@@ -199,6 +199,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
     private void placeEggs(List<Egg> objects)
     {
+        Location currentLocation = getLocation();
+        int avg = WinnipegTrailsApplication.modes[WinnipegTrailsApplication.getTransportMode()];
+
         // Loop through the results of the search
         for(Egg item : objects) {
 
@@ -214,8 +217,16 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             MarkerOptions markerOpts = new MarkerOptions()
                     .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
                     .title(item.getTitle())
-                    .snippet(item.getPoints().toString())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
+
+            if(currentLocation != null) {
+
+                float[] results = new float[1];
+                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
+
+                int time = Math.round(results[0] / avg);
+                markerOpts.snippet(String.valueOf(time));
+            }
 
             // Add a new marker
             Marker marker = googleMap.addMarker(markerOpts);

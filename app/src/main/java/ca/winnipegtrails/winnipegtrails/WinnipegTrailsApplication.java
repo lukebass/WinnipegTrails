@@ -16,12 +16,14 @@ public class WinnipegTrailsApplication extends Application
     // Debugging tag for the application
     public static final String APPTAG = "WinnipegTrails";
 
+    public static final int[] modes = {75, 250, 325, 125, 200, 500};
+
     private static SharedPreferences preferences;
 
     // Key for saving the transport mode preference
     private static final String KEY_TRANSPORT_MODE = "transportMode";
 
-    private static final int DEFAULT_TRANSPORT_MODE = 1;
+    private static final int DEFAULT_TRANSPORT_MODE = 0;
 
     @Override
     public void onCreate()
@@ -40,13 +42,13 @@ public class WinnipegTrailsApplication extends Application
         preferences = getSharedPreferences("ca.winnipegtrails.winnipegtrails", Context.MODE_PRIVATE);
     }
 
-    public static float getTransportMode()
+    public static int getTransportMode()
     {
         return preferences.getInt(KEY_TRANSPORT_MODE, DEFAULT_TRANSPORT_MODE);
     }
 
     public static void setTransportMode(int value)
     {
-        preferences.edit().putFloat(KEY_TRANSPORT_MODE, value).apply();
+        preferences.edit().putInt(KEY_TRANSPORT_MODE, value).apply();
     }
 }
