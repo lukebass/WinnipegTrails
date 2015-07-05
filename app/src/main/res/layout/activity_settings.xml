@@ -85,9 +85,7 @@
                     android:layout_marginStart="10dp"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="#ff0000"
-                    android:clickable="true"
-                    android:onClick="modeSelected" />
+                    android:textColor="#ff0000" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,10 +109,16 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:clickable="true"
-                    android:onClick="notifySelected" />
+                    android:textStyle="bold" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout

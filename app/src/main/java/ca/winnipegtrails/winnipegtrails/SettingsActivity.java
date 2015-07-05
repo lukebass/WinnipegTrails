@@ -20,7 +20,16 @@ public class SettingsActivity extends Activity
         TextView modeButton = (TextView) findViewById(R.id.mode_button);
         modeButton.setText(WinnipegTrailsApplication.types[WinnipegTrailsApplication.getTransportMode()]);
 
+        modeButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                modeSelected(modeButton);
+            }
+        });
+
         TextView notifyButton = (TextView) findViewById(R.id.notify_button);
+        TextView loginButton = (TextView) findViewById(R.id.login_button);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if(currentUser != null) {
@@ -34,9 +43,41 @@ public class SettingsActivity extends Activity
                 notifyButton.setText("NO");
                 notifyButton.setTextColor(Color.RED);
             }
+
+            notifyButton.setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View view)
+                {
+                    notifySelected(notifyButton, currentUser);
+                }
+            });
+
+            loginButton.setText("LOGOUT");
+            loginButton.setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View view)
+                {
+                    currentUser.logOut();
+
+                    Intent intent = new Intent(SettingsActivity.this, ModeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
         }
         else {
+
             notifyButton.setText("NO");
+            notifyButton.setTextColor(Color.RED);
+
+            loginButton.setText("LOGIN");
+            loginButton.setOnClickListener(new View.OnClickListener()
+            {
+                public void onClick(View view)
+                {
+                    startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+                }
+            });
         }
 
         TextView gemButton = (TextView) findViewById(R.id.gem_button);
@@ -67,10 +108,9 @@ public class SettingsActivity extends Activity
         });
     }
 
-    public void modeSelected(View view)
+    private void modeSelected(TextView view)
     {
-        TextView mode = (TextView) view;
-        CharSequence modeText = mode.getText();
+        CharSequence modeText = view.getText();
 
         int i = 1;
         String[] types = WinnipegTrailsApplication.types;
@@ -82,7 +122,7 @@ public class SettingsActivity extends Activity
                     i = 0;
                 }
 
-                mode.setText(WinnipegTrailsApplication.types[i]);
+                view.setText(WinnipegTrailsApplication.types[i]);
                 WinnipegTrailsApplication.setTransportMode(i);
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
@@ -99,26 +139,21 @@ public class SettingsActivity extends Activity
         }
     }
 
-    public void notifySelected(View view)
+    private void notifySelected(TextView view, ParseUser currentUser)
     {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser != null) {
+        CharSequence notifyText = view.getText();
 
-            TextView notify = (TextView) view;
-            CharSequence notifyText = notify.getText();
+        if(notifyText == "NO") {
 
-            if(notifyText == "NO") {
+            view.setText("YES");
+            currentUser.put("notifications", true);
+            currentUser.saveInBackground();
+        }
+        else {
 
-                notify.setText("YES");
-                currentUser.put("notifications", true);
-                currentUser.saveInBackground();
-            }
-            else {
-
-                notify.setText("NO");
-                currentUser.put("notifications", false);
-                currentUser.saveInBackground();
-            }
+            view.setText("NO");
+            currentUser.put("notifications", false);
+            currentUser.saveInBackground();
         }
     }
 }
