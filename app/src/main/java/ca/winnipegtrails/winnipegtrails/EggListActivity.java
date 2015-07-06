@@ -44,14 +44,6 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
 
-                TextView points = (TextView) view.findViewById(R.id.list_item_points);
-                if(item.getNumber("points") == null) {
-                    points.setText("0");
-                }
-                else {
-                    points.setText(item.getNumber("points").toString());
-                }
-
                 return view;
             }
         };

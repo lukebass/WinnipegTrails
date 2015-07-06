@@ -17,7 +17,7 @@ public class SettingsActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        TextView modeButton = (TextView) findViewById(R.id.mode_button);
+        final TextView modeButton = (TextView) findViewById(R.id.mode_button);
         modeButton.setText(WinnipegTrailsApplication.types[WinnipegTrailsApplication.getTransportMode()]);
 
         modeButton.setOnClickListener(new View.OnClickListener()
@@ -28,10 +28,10 @@ public class SettingsActivity extends Activity
             }
         });
 
-        TextView notifyButton = (TextView) findViewById(R.id.notify_button);
+        final TextView notifyButton = (TextView) findViewById(R.id.notify_button);
         TextView loginButton = (TextView) findViewById(R.id.login_button);
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        final ParseUser currentUser = ParseUser.getCurrentUser();
         if(currentUser != null) {
 
             Boolean notify = currentUser.getBoolean("notifications");
