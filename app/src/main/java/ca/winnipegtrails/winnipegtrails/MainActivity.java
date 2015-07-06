@@ -23,9 +23,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -37,6 +40,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 {
     private GoogleMap googleMap;
     private Map<String, Marker> mapMarkers = new HashMap<>();
+    private Map<String, Egg> mapEggs = new HashMap<>();
     private GoogleApiClient googleApiClient;
 
     @Override
@@ -115,6 +119,47 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
+
+        googleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                // Getting view from the layout file info_window_layout
+                View view = getLayoutInflater().inflate(R.layout.info_egg, null);
+
+                ParseImageView image = (ParseImageView) view.findViewById(R.id.info_image);
+                ParseFile imageFile = mapEggs.get(marker.getTitle()).getLargeImage();
+
+                if(imageFile != null) {
+                    image.setParseFile(imageFile);
+                    image.loadInBackground();
+                }
+                else {
+                    image.setImageResource(R.drawable.icon);
+                }
+
+                // Getting reference to the TextView to set latitude
+                TextView title = (TextView) view.findViewById(R.id.info_title);
+                // Setting the title
+                title.setText(marker.getTitle());
+
+                // Getting reference to the TextView to set longitude
+                TextView snippet = (TextView) view.findViewById(R.id.info_snippet);
+                // Setting the snippet
+                snippet.setText(marker.getSnippet());
+
+                // Returning the view containing InfoWindow contents
+                return view;
+            }
+        });
     }
 
     private void centerMap()
@@ -231,6 +276,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             // Add a new marker
             Marker marker = googleMap.addMarker(markerOpts);
             mapMarkers.put(item.getObjectId(), marker);
+            mapEggs.put(item.getTitle(), item);
         }
     }
 
