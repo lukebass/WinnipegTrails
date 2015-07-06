@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp" >
+    android:padding="10dp" >
 
     <com.parse.ParseImageView
         android:id="@+id/info_image"
@@ -14,7 +14,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:src="@drawable/icon" />
 
     <TextView
         android:id="@+id/info_title"
@@ -23,8 +24,7 @@
         android:layout_height="25dp"
         android:layout_toEndOf="@id/info_image"
         android:layout_toRightOf="@id/info_image"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/info_snippet"
@@ -34,6 +34,5 @@
         android:layout_toEndOf="@id/info_image"
         android:layout_toRightOf="@id/info_image"
         android:layout_below="@id/info_title"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="12sp" />
 </RelativeLayout>

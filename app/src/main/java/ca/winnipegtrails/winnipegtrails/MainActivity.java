@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -52,16 +51,28 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         if(currentUser != null && currentUser.getNumber("points") != null) {
 
-            int points = currentUser.getNumber("points").intValue();
-            int length = String.valueOf(points).length();
+            String points = currentUser.getNumber("points").toString();
+            int length = points.length();
 
             if(length == 1) {
-                score.setText("SCORE: 000" + points);
+                score.setText("SCORE: 0000000" + points);
             }
             else if(length == 2) {
-                score.setText("SCORE: 00" + points);
+                score.setText("SCORE: 000000" + points);
             }
             else if(length == 3) {
+                score.setText("SCORE: 00000" + points);
+            }
+            else if(length == 4) {
+                score.setText("SCORE: 0000" + points);
+            }
+            else if(length == 5) {
+                score.setText("SCORE: 000" + points);
+            }
+            else if(length == 6) {
+                score.setText("SCORE: 00" + points);
+            }
+            else if(length == 7) {
                 score.setText("SCORE: 0" + points);
             }
             else {
@@ -69,7 +80,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             }
         }
         else {
-            score.setText("SCORE: 0000");
+            score.setText("SCORE: 00000000");
         }
 
         ImageView centerButton = (ImageView) findViewById(R.id.center_button);
@@ -132,9 +143,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
                 // Getting view from the layout file info_window_layout
                 View view = getLayoutInflater().inflate(R.layout.info_egg, null);
-
-                ParseImageView image = (ParseImageView) view.findViewById(R.id.info_image);
-                image.setImageResource(R.drawable.icon);
 
                 // Getting reference to the TextView to set latitude
                 TextView title = (TextView) view.findViewById(R.id.info_title);

@@ -21,6 +21,18 @@ public class UserListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
+        TextView score = (TextView) findViewById(R.id.score);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if(currentUser != null && currentUser.getNumber("points") != null) {
+
+            String points = currentUser.getNumber("points").toString();
+            score.setText(points);
+        }
+        else {
+            score.setText("0");
+        }
+
         // Set up a customized query
         ParseQueryAdapter.QueryFactory<ParseUser> factory = new ParseQueryAdapter.QueryFactory<ParseUser>()
         {
