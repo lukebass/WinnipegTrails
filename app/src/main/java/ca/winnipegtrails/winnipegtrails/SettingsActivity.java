@@ -146,12 +146,14 @@ public class SettingsActivity extends Activity
         if(notifyText == "NO") {
 
             view.setText("YES");
+            view.setTextColor(Color.GREEN);
             currentUser.put("notifications", true);
             currentUser.saveInBackground();
         }
         else {
 
             view.setText("NO");
+            view.setTextColor(Color.RED);
             currentUser.put("notifications", false);
             currentUser.saveInBackground();
         }

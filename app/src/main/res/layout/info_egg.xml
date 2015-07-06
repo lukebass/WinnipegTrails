@@ -9,8 +9,8 @@
     <com.parse.ParseImageView
         android:id="@+id/info_image"
         android:gravity="center_vertical"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginEnd="10dp"
@@ -20,24 +20,20 @@
         android:id="@+id/info_title"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="25dp"
         android:layout_toEndOf="@id/info_image"
         android:layout_toRightOf="@id/info_image"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/info_snippet"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="25dp"
         android:layout_toEndOf="@id/info_image"
         android:layout_toRightOf="@id/info_image"
         android:layout_below="@id/info_title"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 </RelativeLayout>

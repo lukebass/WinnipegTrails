@@ -26,6 +26,8 @@
         android:id="@+id/center_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/center"
         android:layout_gravity="start|bottom" />
@@ -42,6 +44,8 @@
         android:id="@+id/bag_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/bag"
         android:layout_gravity="end|bottom" />

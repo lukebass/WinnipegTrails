@@ -17,17 +17,16 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -40,7 +39,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 {
     private GoogleMap googleMap;
     private Map<String, Marker> mapMarkers = new HashMap<>();
-    private Map<String, Egg> mapEggs = new HashMap<>();
     private GoogleApiClient googleApiClient;
 
     @Override
@@ -136,15 +134,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 View view = getLayoutInflater().inflate(R.layout.info_egg, null);
 
                 ParseImageView image = (ParseImageView) view.findViewById(R.id.info_image);
-                ParseFile imageFile = mapEggs.get(marker.getTitle()).getLargeImage();
-
-                if(imageFile != null) {
-                    image.setParseFile(imageFile);
-                    image.loadInBackground();
-                }
-                else {
-                    image.setImageResource(R.drawable.icon);
-                }
+                image.setImageResource(R.drawable.icon);
 
                 // Getting reference to the TextView to set latitude
                 TextView title = (TextView) view.findViewById(R.id.info_title);
@@ -270,13 +260,12 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
                 int time = Math.round(results[0] / avg);
-                markerOpts.snippet("Travel: " + String.valueOf(time));
+                markerOpts.snippet("Travel: " + String.valueOf(time) + " mins");
             }
 
             // Add a new marker
             Marker marker = googleMap.addMarker(markerOpts);
             mapMarkers.put(item.getObjectId(), marker);
-            mapEggs.put(item.getTitle(), item);
         }
     }
 
