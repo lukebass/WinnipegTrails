@@ -283,7 +283,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private void eggQuery(final Boolean find)
     {
         ParseQuery<Egg> eggQuery = Egg.getQuery();
-        eggQuery.orderByDescending("title");
+        eggQuery.orderByAscending("title");
 
         eggQuery.findInBackground(new FindCallback<Egg>()
         {
