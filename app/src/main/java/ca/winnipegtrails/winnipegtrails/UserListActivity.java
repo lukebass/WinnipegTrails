@@ -61,7 +61,22 @@ public class UserListActivity extends Activity
                 createUserRankMap(objects);
             }
         });
+    }
 
+    private void createUserRankMap(List<ParseUser> objects)
+    {
+        int i = 1;
+        for(ParseUser item : objects) {
+
+            userRankMap.put(item.getObjectId(), i);
+            i++;
+        }
+
+        setupQueryAdapter();
+    }
+
+    private void setupQueryAdapter()
+    {
         // Set up a customized query
         ParseQueryAdapter.QueryFactory<ParseUser> factory = new ParseQueryAdapter.QueryFactory<ParseUser>()
         {
@@ -98,39 +113,10 @@ public class UserListActivity extends Activity
             }
         };
 
-        userQueryAdapter.setAutoload(false);
         userQueryAdapter.setPaginationEnabled(false);
 
         // Attach the query adapter to the view
         ListView postsListView = (ListView) findViewById(R.id.list);
         postsListView.setAdapter(userQueryAdapter);
-    }
-
-    private void createUserRankMap(List<ParseUser> objects)
-    {
-        int i = 1;
-        for(ParseUser item : objects) {
-
-            userRankMap.put(item.getObjectId(), i);
-            i++;
-        }
-    }
-
-    /*
-     * Set up a query to update the list view
-     */
-    private void doListQuery()
-    {
-        userQueryAdapter.loadObjects();
-    }
-
-    /*
-     * Called when the Activity is resumed. Updates the view.
-     */
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        doListQuery();
     }
 }

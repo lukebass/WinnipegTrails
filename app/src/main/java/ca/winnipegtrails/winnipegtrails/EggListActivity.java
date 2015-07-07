@@ -55,7 +55,19 @@ public class EggListActivity extends Activity
                 }
             });
         }
+    }
 
+    private void createUserEggLinksMap(List<UserEggLinks> objects)
+    {
+        for(UserEggLinks item : objects) {
+            eggMap.add(item.getEgg().getObjectId());
+        }
+
+        setupQueryAdapter();
+    }
+
+    private void setupQueryAdapter()
+    {
         // Set up a customized query
         ParseQueryAdapter.QueryFactory<Egg> factory = new ParseQueryAdapter.QueryFactory<Egg>()
         {
@@ -105,36 +117,10 @@ public class EggListActivity extends Activity
             }
         };
 
-        eggQueryAdapter.setAutoload(false);
         eggQueryAdapter.setPaginationEnabled(false);
 
         // Attach the query adapter to the view
         ListView postsListView = (ListView) findViewById(R.id.list);
         postsListView.setAdapter(eggQueryAdapter);
-    }
-
-    private void createUserEggLinksMap(List<UserEggLinks> objects)
-    {
-        for(UserEggLinks item : objects) {
-            eggMap.add(item.getEgg().getObjectId());
-        }
-    }
-
-    /*
-     * Set up a query to update the list view
-     */
-    private void doListQuery()
-    {
-        eggQueryAdapter.loadObjects();
-    }
-
-    /*
-     * Called when the Activity is resumed. Updates the view.
-     */
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        doListQuery();
     }
 }
