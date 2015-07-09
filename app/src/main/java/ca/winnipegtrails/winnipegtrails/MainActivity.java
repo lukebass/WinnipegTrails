@@ -49,37 +49,29 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         TextView score = (TextView) findViewById(R.id.score);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        if(currentUser != null && currentUser.getNumber("points") != null) {
+        if (currentUser != null && currentUser.getNumber("points") != null) {
 
             String points = currentUser.getNumber("points").toString();
             int length = points.length();
 
-            if(length == 1) {
+            if (length == 1) {
                 score.setText("SCORE: 0000000" + points);
-            }
-            else if(length == 2) {
+            } else if (length == 2) {
                 score.setText("SCORE: 000000" + points);
-            }
-            else if(length == 3) {
+            } else if (length == 3) {
                 score.setText("SCORE: 00000" + points);
-            }
-            else if(length == 4) {
+            } else if (length == 4) {
                 score.setText("SCORE: 0000" + points);
-            }
-            else if(length == 5) {
+            } else if (length == 5) {
                 score.setText("SCORE: 000" + points);
-            }
-            else if(length == 6) {
+            } else if (length == 6) {
                 score.setText("SCORE: 00" + points);
-            }
-            else if(length == 7) {
+            } else if (length == 7) {
                 score.setText("SCORE: 0" + points);
-            }
-            else {
+            } else {
                 score.setText(points);
             }
-        }
-        else {
+        } else {
             score.setText("SCORE: 00000000");
         }
 
@@ -129,18 +121,19 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
 
-        googleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
-
+        googleMap.setInfoWindowAdapter(new InfoWindowAdapter()
+        {
             // Use default InfoWindow frame
             @Override
-            public View getInfoWindow(Marker marker) {
+            public View getInfoWindow(Marker marker)
+            {
                 return null;
             }
 
             // Defines the contents of the InfoWindow
             @Override
-            public View getInfoContents(Marker marker) {
-
+            public View getInfoContents(Marker marker)
+            {
                 // Getting view from the layout file info_window_layout
                 View view = getLayoutInflater().inflate(R.layout.info_egg, null);
 
@@ -163,7 +156,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private void centerMap()
     {
         Location currentLocation = getLocation();
-        if(currentLocation != null) {
+        if (currentLocation != null) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
         }
     }
@@ -171,7 +164,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     private void findEggs(List<Egg> objects)
     {
         Location currentLocation = getLocation();
-        if(currentLocation == null) {
+        if (currentLocation == null) {
             return;
         }
 
@@ -179,26 +172,25 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         Egg closest = null;
 
         // Loop through the results of the search
-        for(final Egg item : objects) {
+        for (final Egg item : objects) {
 
             float[] results = new float[1];
             Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
-            if(results[0] < item.getActionRadiusMeters().floatValue()) {
+            if (results[0] < item.getActionRadiusMeters().floatValue()) {
 
-                if(closest == null) {
+                if (closest == null) {
 
                     distance = results[0];
                     closest = item;
-                }
-                else if(results[0] < distance) {
+                } else if (results[0] < distance) {
 
                     distance = results[0];
                     closest = item;
                 }
 
                 final ParseUser currentUser = ParseUser.getCurrentUser();
-                if(currentUser != null) {
+                if (currentUser != null) {
 
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
                     userEggQuery.whereEqualTo("user", currentUser);
@@ -208,23 +200,22 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     {
                         public void done(UserEggLinks object, ParseException e)
                         {
-                            if(e != null) {
+                            if (e != null) {
 
-                                if(WinnipegTrailsApplication.APPDEBUG) {
+                                if (WinnipegTrailsApplication.APPDEBUG) {
                                     Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                                 }
 
-                                if(e.getCode() == 101) {
+                                if (e.getCode() == 101) {
 
                                     UserEggLinks userEggLink = new UserEggLinks();
                                     userEggLink.put("user", currentUser);
                                     userEggLink.put("egg", item);
                                     userEggLink.saveInBackground();
 
-                                    if(currentUser.getNumber("points") == null) {
+                                    if (currentUser.getNumber("points") == null) {
                                         currentUser.put("points", item.getPoints().intValue());
-                                    }
-                                    else {
+                                    } else {
                                         currentUser.put("points", currentUser.getNumber("points").intValue() + item.getPoints().intValue());
                                     }
 
@@ -234,21 +225,19 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     startActivity(new Intent(this, LoginActivity.class));
                 }
             }
         }
 
-        if(closest != null) {
+        if (closest != null) {
 
             // Launch the egg activity
             Intent intent = new Intent(this, EggActivity.class);
             intent.putExtra("id", closest.getObjectId());
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.no_eggs_found, Toast.LENGTH_LONG).show();
         }
     }
@@ -259,11 +248,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         int avg = WinnipegTrailsApplication.modes[WinnipegTrailsApplication.getTransportMode()];
 
         // Loop through the results of the search
-        for(Egg item : objects) {
+        for (Egg item : objects) {
 
             // Check for an existing marker for this item
             Marker oldMarker = mapMarkers.get(item.getObjectId());
-            if(oldMarker != null) {
+            if (oldMarker != null) {
                 // In range marker already exists, skip adding it
                 continue;
             }
@@ -275,7 +264,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                     .title(item.getTitle())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
 
-            if(currentLocation != null) {
+            if (currentLocation != null) {
 
                 float[] results = new float[1];
                 Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
@@ -303,19 +292,18 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             @Override
             public void done(List<Egg> objects, ParseException e)
             {
-                if(e != null) {
+                if (e != null) {
 
-                    if(WinnipegTrailsApplication.APPDEBUG) {
+                    if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
                     }
 
                     return;
                 }
 
-                if(find) {
+                if (find) {
                     findEggs(objects);
-                }
-                else {
+                } else {
                     placeEggs(objects);
                 }
             }
@@ -327,10 +315,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
      */
     private Location getLocation()
     {
-        if(googleApiClient.isConnected()) {
+        if (googleApiClient.isConnected()) {
             return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
             return null;
         }
@@ -369,7 +356,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     protected void onStop()
     {
         super.onStop();
-        if(googleApiClient.isConnected()) {
+        if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
     }
@@ -380,13 +367,13 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     @Override
     public void onConnected(Bundle connectionHint)
     {
-        if(WinnipegTrailsApplication.APPDEBUG) {
+        if (WinnipegTrailsApplication.APPDEBUG) {
             // In debug mode, log the status
             Log.d(WinnipegTrailsApplication.APPTAG, "Connected to location services");
         }
 
         Location currentLocation = getLocation();
-        if(currentLocation != null) {
+        if (currentLocation != null) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
         }
     }
@@ -394,7 +381,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     @Override
     public void onConnectionFailed(ConnectionResult result)
     {
-        if(WinnipegTrailsApplication.APPDEBUG) {
+        if (WinnipegTrailsApplication.APPDEBUG) {
             // In debug mode, log the status
             Log.d(WinnipegTrailsApplication.APPTAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
         }
@@ -403,7 +390,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     @Override
     public void onConnectionSuspended(int cause)
     {
-        if(WinnipegTrailsApplication.APPDEBUG) {
+        if (WinnipegTrailsApplication.APPDEBUG) {
             // In debug mode, log the status
             Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended: Cause = " + cause);
         }

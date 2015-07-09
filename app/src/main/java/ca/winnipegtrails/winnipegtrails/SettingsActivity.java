@@ -32,14 +32,13 @@ public class SettingsActivity extends Activity
         TextView loginButton = (TextView) findViewById(R.id.login_button);
 
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
 
             Boolean notify = currentUser.getBoolean("notifications");
-            if(notify) {
+            if (notify) {
                 notifyButton.setText("YES");
                 notifyButton.setTextColor(Color.GREEN);
-            }
-            else {
+            } else {
                 notifyButton.setText("NO");
                 notifyButton.setTextColor(Color.RED);
             }
@@ -64,8 +63,7 @@ public class SettingsActivity extends Activity
                     startActivity(intent);
                 }
             });
-        }
-        else {
+        } else {
 
             notifyButton.setText("NO");
             notifyButton.setTextColor(Color.RED);
@@ -114,11 +112,11 @@ public class SettingsActivity extends Activity
 
         int i = 1;
         String[] types = WinnipegTrailsApplication.types;
-        for(String item : types) {
+        for (String item : types) {
 
-            if(modeText == item) {
+            if (modeText == item) {
 
-                if(i == 6) {
+                if (i == 6) {
                     i = 0;
                 }
 
@@ -126,7 +124,7 @@ public class SettingsActivity extends Activity
                 WinnipegTrailsApplication.setTransportMode(i);
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
-                if(currentUser != null) {
+                if (currentUser != null) {
 
                     currentUser.put("transport_mode", i);
                     currentUser.saveInBackground();
@@ -143,14 +141,13 @@ public class SettingsActivity extends Activity
     {
         CharSequence notifyText = view.getText();
 
-        if(notifyText == "NO") {
+        if (notifyText == "NO") {
 
             view.setText("YES");
             view.setTextColor(Color.GREEN);
             currentUser.put("notifications", true);
             currentUser.saveInBackground();
-        }
-        else {
+        } else {
 
             view.setText("NO");
             view.setTextColor(Color.RED);

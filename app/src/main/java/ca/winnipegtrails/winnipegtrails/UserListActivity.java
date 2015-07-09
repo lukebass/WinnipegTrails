@@ -32,12 +32,11 @@ public class UserListActivity extends Activity
         TextView score = (TextView) findViewById(R.id.score);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        if(currentUser != null && currentUser.getNumber("points") != null) {
+        if (currentUser != null && currentUser.getNumber("points") != null) {
 
             String points = currentUser.getNumber("points").toString();
             score.setText(points);
-        }
-        else {
+        } else {
             score.setText("0");
         }
 
@@ -49,9 +48,9 @@ public class UserListActivity extends Activity
             @Override
             public void done(List<ParseUser> objects, ParseException e)
             {
-                if(e != null) {
+                if (e != null) {
 
-                    if(WinnipegTrailsApplication.APPDEBUG) {
+                    if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                     }
 
@@ -66,7 +65,7 @@ public class UserListActivity extends Activity
     private void createUserRankMap(List<ParseUser> objects)
     {
         int i = 1;
-        for(ParseUser item : objects) {
+        for (ParseUser item : objects) {
 
             userRankMap.put(item.getObjectId(), i);
             i++;
@@ -94,7 +93,7 @@ public class UserListActivity extends Activity
             @Override
             public View getItemView(ParseUser item, View view, ViewGroup parent)
             {
-                if(view == null) {
+                if (view == null) {
                     view = View.inflate(getContext(), R.layout.list_item_user, null);
                 }
 
@@ -102,10 +101,9 @@ public class UserListActivity extends Activity
                 title.setText(userRankMap.get(item.getObjectId()) + ".  " + item.getUsername());
 
                 TextView points = (TextView) view.findViewById(R.id.list_item_points);
-                if(item.getNumber("points") == null) {
+                if (item.getNumber("points") == null) {
                     points.setText("0");
-                }
-                else {
+                } else {
                     points.setText(item.getNumber("points").toString());
                 }
 

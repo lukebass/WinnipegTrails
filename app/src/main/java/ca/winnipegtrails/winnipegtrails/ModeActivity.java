@@ -36,17 +36,16 @@ public class ModeActivity extends Activity
         CharSequence selectedText = selected.getText();
 
         LinearLayout modes = (LinearLayout) findViewById(R.id.modes);
-        for(int i = 0; i < modes.getChildCount(); i++) {
+        for (int i = 0; i < modes.getChildCount(); i++) {
 
             View child = modes.getChildAt(i);
-            if(child instanceof TextView) {
+            if (child instanceof TextView) {
 
                 TextView mode = (TextView) child;
 
-                if(selectedText == mode.getText()) {
+                if (selectedText == mode.getText()) {
                     mode.setTextColor(Color.GREEN);
-                }
-                else {
+                } else {
                     mode.setTextColor(Color.BLACK);
                 }
             }
@@ -59,14 +58,14 @@ public class ModeActivity extends Activity
 
         int j = 0;
         LinearLayout modes = (LinearLayout) findViewById(R.id.modes);
-        for(int i = 0; i < modes.getChildCount(); i++) {
+        for (int i = 0; i < modes.getChildCount(); i++) {
 
             View child = modes.getChildAt(i);
-            if(child instanceof TextView) {
+            if (child instanceof TextView) {
 
                 TextView mode = (TextView) child;
 
-                if(Color.GREEN == mode.getCurrentTextColor()) {
+                if (Color.GREEN == mode.getCurrentTextColor()) {
 
                     selectedText = mode.getText().toString();
                     j = i;
@@ -75,12 +74,12 @@ public class ModeActivity extends Activity
             }
         }
 
-        if(selectedText != null) {
+        if (selectedText != null) {
 
             WinnipegTrailsApplication.setTransportMode(j);
 
             ParseUser currentUser = ParseUser.getCurrentUser();
-            if(currentUser != null) {
+            if (currentUser != null) {
 
                 currentUser.put("transport_mode", j);
                 currentUser.saveInBackground();
@@ -90,8 +89,7 @@ public class ModeActivity extends Activity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("mode", selectedText);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.no_mode_selected, Toast.LENGTH_LONG).show();
         }
     }

@@ -51,7 +51,8 @@ public class LoginActivity extends Activity
         });
     }
 
-    private void login() {
+    private void login()
+    {
 
         String username = usernameEdit.getText().toString().trim();
         String password = passwordEdit.getText().toString().trim();
@@ -60,18 +61,17 @@ public class LoginActivity extends Activity
         boolean validationError = false;
         StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
 
-        if(username.length() == 0) {
+        if (username.length() == 0) {
 
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_username));
         }
 
-        if(password.length() == 0) {
+        if (password.length() == 0) {
 
-            if(validationError) {
+            if (validationError) {
                 validationErrorMessage.append(getString(R.string.error_join));
-            }
-            else {
+            } else {
                 validationError = true;
             }
 
@@ -81,7 +81,7 @@ public class LoginActivity extends Activity
         validationErrorMessage.append(getString(R.string.error_end));
 
         // If there is a validation error, display the error
-        if(validationError) {
+        if (validationError) {
 
             Toast.makeText(LoginActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG).show();
             return;
@@ -99,11 +99,10 @@ public class LoginActivity extends Activity
             public void done(ParseUser user, ParseException e)
             {
                 dialog.dismiss();
-                if(e != null) {
+                if (e != null) {
                     // Show the error message
                     Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     // Start an intent for the dispatch activity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -32,7 +32,7 @@ public class EggListActivity extends Activity
         setContentView(R.layout.activity_egg_list);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
 
             ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
             userEggQuery.whereEqualTo("user", currentUser);
@@ -42,9 +42,9 @@ public class EggListActivity extends Activity
                 @Override
                 public void done(List<UserEggLinks> objects, ParseException e)
                 {
-                    if(e != null) {
+                    if (e != null) {
 
-                        if(WinnipegTrailsApplication.APPDEBUG) {
+                        if (WinnipegTrailsApplication.APPDEBUG) {
                             Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                         }
 
@@ -59,7 +59,7 @@ public class EggListActivity extends Activity
 
     private void createUserEggLinksMap(List<UserEggLinks> objects)
     {
-        for(UserEggLinks item : objects) {
+        for (UserEggLinks item : objects) {
             eggMap.add(item.getEgg().getObjectId());
         }
 
@@ -85,7 +85,7 @@ public class EggListActivity extends Activity
             @Override
             public View getItemView(Egg item, View view, ViewGroup parent)
             {
-                if(view == null) {
+                if (view == null) {
                     view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
@@ -94,21 +94,19 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
 
-                if(eggMap.contains(item.getObjectId())) {
+                if (eggMap.contains(item.getObjectId())) {
 
                     ParseFile imageFile = item.getLargeImage();
 
-                    if(imageFile != null) {
+                    if (imageFile != null) {
                         image.setParseFile(imageFile);
                         image.loadInBackground();
-                    }
-                    else {
+                    } else {
                         image.setImageResource(R.drawable.icon);
                     }
 
                     title.setTextColor(Color.BLACK);
-                }
-                else {
+                } else {
                     image.setImageResource(R.drawable.hidden);
                     title.setTextColor(Color.GRAY);
                 }

@@ -48,9 +48,9 @@ public class EggActivity extends Activity
         {
             public void done(Egg object, ParseException e)
             {
-                if(e != null) {
+                if (e != null) {
 
-                    if(WinnipegTrailsApplication.APPDEBUG) {
+                    if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for an egg", e);
                     }
 
@@ -92,9 +92,9 @@ public class EggActivity extends Activity
             @Override
             public void done(List<Question> objects, ParseException e)
             {
-                if(e != null) {
+                if (e != null) {
 
-                    if(WinnipegTrailsApplication.APPDEBUG) {
+                    if (WinnipegTrailsApplication.APPDEBUG) {
                         Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for egg questions", e);
                     }
 
@@ -115,11 +115,10 @@ public class EggActivity extends Activity
         ParseImageView image = (ParseImageView) findViewById(R.id.image);
         ParseFile imageFile = egg.getLargeImage();
 
-        if(imageFile != null) {
+        if (imageFile != null) {
             image.setParseFile(imageFile);
             image.loadInBackground();
-        }
-        else {
+        } else {
             image.setImageResource(R.drawable.icon);
         }
 
@@ -127,7 +126,7 @@ public class EggActivity extends Activity
 
         int i = 1;
         // Loop through the results of the search
-        for(final Question item : objects) {
+        for (final Question item : objects) {
 
             // add text view
             TextView question = new TextView(this);
@@ -137,10 +136,9 @@ public class EggActivity extends Activity
 
             LinearLayout.LayoutParams questionParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            if(i == 1) {
+            if (i == 1) {
                 question.setLayoutParams(questionParams);
-            }
-            else {
+            } else {
                 questionParams.topMargin = convertToPixels(10);
                 question.setLayoutParams(questionParams);
             }
@@ -162,16 +160,16 @@ public class EggActivity extends Activity
             {
                 public void done(QuestionUserLinks object, ParseException e)
                 {
-                    if(e != null) {
+                    if (e != null) {
 
-                        if(WinnipegTrailsApplication.APPDEBUG) {
+                        if (WinnipegTrailsApplication.APPDEBUG) {
                             Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user questions", e);
                         }
 
                         return;
                     }
 
-                    if(object != null) {
+                    if (object != null) {
                         answer.setText(item.getAnswer());
                         answer.setEnabled(false);
                     }
@@ -189,29 +187,28 @@ public class EggActivity extends Activity
     private void submit()
     {
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
-        for(int i = 0; i < questions.getChildCount(); i++) {
+        for (int i = 0; i < questions.getChildCount(); i++) {
 
             View child = questions.getChildAt(i);
-            if(child instanceof EditText) {
+            if (child instanceof EditText) {
 
                 EditText userAnswer = (EditText) child;
 
-                if(!userAnswer.isEnabled()) {
+                if (!userAnswer.isEnabled()) {
                     continue;
                 }
 
                 Question question = questionMap.get(userAnswer.getId());
-                if(question.getAnswer().toLowerCase().equals(userAnswer.getText().toString().toLowerCase().trim())) {
+                if (question.getAnswer().toLowerCase().equals(userAnswer.getText().toString().toLowerCase().trim())) {
 
                     QuestionUserLinks questionUserLink = new QuestionUserLinks();
                     questionUserLink.put("question", question);
                     questionUserLink.put("user", currentUser);
                     questionUserLink.saveInBackground();
 
-                    if(currentUser.getNumber("points") == null) {
+                    if (currentUser.getNumber("points") == null) {
                         currentUser.put("points", question.getPoints().intValue());
-                    }
-                    else {
+                    } else {
                         currentUser.put("points", currentUser.getNumber("points").intValue() + question.getPoints().intValue());
                     }
 

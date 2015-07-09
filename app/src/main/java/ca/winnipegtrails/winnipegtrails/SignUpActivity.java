@@ -54,36 +54,34 @@ public class SignUpActivity extends Activity
         boolean validationError = false;
         StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
 
-        if(username.length() == 0) {
+        if (username.length() == 0) {
 
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_username));
         }
 
-        if(email.length() == 0) {
+        if (email.length() == 0) {
 
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_email));
         }
 
-        if(password.length() == 0) {
+        if (password.length() == 0) {
 
-            if(validationError) {
+            if (validationError) {
                 validationErrorMessage.append(getString(R.string.error_join));
-            }
-            else {
+            } else {
                 validationError = true;
             }
 
             validationErrorMessage.append(getString(R.string.error_blank_password));
         }
 
-        if(!password.equals(passwordAgain)) {
+        if (!password.equals(passwordAgain)) {
 
-            if(validationError) {
+            if (validationError) {
                 validationErrorMessage.append(getString(R.string.error_join));
-            }
-            else {
+            } else {
                 validationError = true;
             }
 
@@ -93,7 +91,7 @@ public class SignUpActivity extends Activity
         validationErrorMessage.append(getString(R.string.error_end));
 
         // If there is a validation error, display the error
-        if(validationError) {
+        if (validationError) {
 
             Toast.makeText(SignUpActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG).show();
             return;
@@ -117,11 +115,10 @@ public class SignUpActivity extends Activity
             public void done(ParseException e)
             {
                 dialog.dismiss();
-                if(e != null) {
+                if (e != null) {
                     // Show the error message
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     // Start an intent for the dispatch activity
                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
