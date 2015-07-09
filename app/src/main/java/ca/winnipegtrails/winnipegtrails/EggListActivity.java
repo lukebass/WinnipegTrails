@@ -20,11 +20,13 @@ import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 public class EggListActivity extends Activity
 {
+    private HashSet<String> userEggMap = new HashSet<>();
     private Map<String, String> eggMap = new HashMap<>();
 
     @Override
@@ -62,7 +64,7 @@ public class EggListActivity extends Activity
     private void createUserEggLinksMap(List<UserEggLinks> objects)
     {
         for (UserEggLinks item : objects) {
-            eggMap.put(item.getEgg().getString("title"), item.getEgg().getObjectId());
+            userEggMap.add(item.getEgg().getObjectId());
         }
 
         setupQueryAdapter();
@@ -96,8 +98,9 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
 
-                if (eggMap.containsKey(item.getTitle())) {
+                if (userEggMap.contains(item.getObjectId())) {
 
+                    eggMap.put(item.getTitle(), item.getObjectId());
                     ParseFile imageFile = item.getLargeImage();
 
                     if (imageFile != null) {

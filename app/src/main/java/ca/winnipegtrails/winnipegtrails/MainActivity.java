@@ -160,7 +160,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
 
-                    Egg egg = mapMarkers.get(marker);
+                    final Egg egg = mapMarkers.get(marker);
 
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
                     userEggQuery.whereEqualTo("user", currentUser);
@@ -175,6 +175,8 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                                 if (WinnipegTrailsApplication.APPDEBUG) {
                                     Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
                                 }
+
+                                return;
                             }
 
                             // Launch the egg activity
