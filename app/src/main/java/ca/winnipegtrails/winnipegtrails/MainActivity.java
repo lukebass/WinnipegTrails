@@ -175,7 +175,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             return;
         }
 
-        Boolean found = false;
+        float distance = 0;
+        Egg closest = null;
+
         // Loop through the results of the search
         for(final Egg item : objects) {
 
@@ -184,7 +186,16 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
             if(results[0] < item.getActionRadiusMeters().floatValue()) {
 
-                found = true;
+                if(closest == null) {
+
+                    distance = results[0];
+                    closest = item;
+                }
+                else if(results[0] < distance) {
+
+                    distance = results[0];
+                    closest = item;
+                }
 
                 final ParseUser currentUser = ParseUser.getCurrentUser();
                 if(currentUser != null) {
@@ -223,11 +234,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                             }
                         }
                     });
-
-                    // Launch the egg activity
-                    Intent intent = new Intent(this, EggActivity.class);
-                    intent.putExtra("id", item.getObjectId());
-                    startActivity(intent);
                 }
                 else {
                     startActivity(new Intent(this, LoginActivity.class));
@@ -235,7 +241,14 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             }
         }
 
-        if(!found) {
+        if(closest != null) {
+
+            // Launch the egg activity
+            Intent intent = new Intent(this, EggActivity.class);
+            intent.putExtra("id", closest.getObjectId());
+            startActivity(intent);
+        }
+        else {
             Toast.makeText(this, R.string.no_eggs_found, Toast.LENGTH_LONG).show();
         }
     }
