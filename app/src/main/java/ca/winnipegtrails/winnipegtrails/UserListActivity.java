@@ -21,7 +21,6 @@ import java.util.Map;
 public class UserListActivity extends Activity
 {
     private Map<String, Integer> userRankMap = new HashMap<>();
-    private ParseQueryAdapter<ParseUser> userQueryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +32,6 @@ public class UserListActivity extends Activity
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         if (currentUser != null && currentUser.getNumber("points") != null) {
-
             String points = currentUser.getNumber("points").toString();
             score.setText(points);
         } else {
@@ -88,7 +86,7 @@ public class UserListActivity extends Activity
         };
 
         // Set up the query adapter
-        userQueryAdapter = new ParseQueryAdapter<ParseUser>(this, factory)
+        ParseQueryAdapter<ParseUser> userQueryAdapter = new ParseQueryAdapter<ParseUser>(this, factory)
         {
             @Override
             public View getItemView(ParseUser item, View view, ViewGroup parent)
@@ -114,7 +112,7 @@ public class UserListActivity extends Activity
         userQueryAdapter.setPaginationEnabled(false);
 
         // Attach the query adapter to the view
-        ListView postsListView = (ListView) findViewById(R.id.list);
-        postsListView.setAdapter(userQueryAdapter);
+        ListView userListView = (ListView) findViewById(R.id.list);
+        userListView.setAdapter(userQueryAdapter);
     }
 }

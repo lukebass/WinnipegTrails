@@ -1,11 +1,13 @@
 package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,13 +19,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EggListActivity extends Activity
 {
-    private HashSet<String> eggMap = new HashSet<>();
-    private ParseQueryAdapter<Egg> eggQueryAdapter;
+    private Map<String, String> eggMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,7 +62,7 @@ public class EggListActivity extends Activity
     private void createUserEggLinksMap(List<UserEggLinks> objects)
     {
         for (UserEggLinks item : objects) {
-            eggMap.add(item.getEgg().getObjectId());
+            eggMap.put(item.getEgg().getString("title"), item.getEgg().getObjectId());
         }
 
         setupQueryAdapter();
@@ -80,7 +82,7 @@ public class EggListActivity extends Activity
         };
 
         // Set up the query adapter
-        eggQueryAdapter = new ParseQueryAdapter<Egg>(this, factory)
+        ParseQueryAdapter<Egg> eggQueryAdapter = new ParseQueryAdapter<Egg>(this, factory)
         {
             @Override
             public View getItemView(Egg item, View view, ViewGroup parent)
@@ -94,7 +96,7 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
 
-                if (eggMap.contains(item.getObjectId())) {
+                if (eggMap.containsKey(item.getTitle())) {
 
                     ParseFile imageFile = item.getLargeImage();
 
@@ -118,7 +120,25 @@ public class EggListActivity extends Activity
         eggQueryAdapter.setPaginationEnabled(false);
 
         // Attach the query adapter to the view
-        ListView postsListView = (ListView) findViewById(R.id.list);
-        postsListView.setAdapter(eggQueryAdapter);
+        ListView eggListView = (ListView) findViewById(R.id.list);
+        eggListView.setAdapter(eggQueryAdapter);
+
+        eggListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                TextView title = (TextView) view.findViewById(R.id.list_item_title);
+                String text = title.getText().toString();
+
+                if (eggMap.containsKey(text)) {
+
+                    // Launch the egg activity
+                    Intent intent = new Intent(EggListActivity.this, EggActivity.class);
+                    intent.putExtra("id", eggMap.get(text));
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
