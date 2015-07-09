@@ -2,25 +2,22 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UserListActivity extends Activity
 {
     private Map<String, Integer> userRankMap = new HashMap<>();
+    private int rank = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,37 +33,6 @@ public class UserListActivity extends Activity
             score.setText(points);
         } else {
             score.setText("0");
-        }
-
-        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-        userQuery.orderByDescending("points");
-
-        userQuery.findInBackground(new FindCallback<ParseUser>()
-        {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e)
-            {
-                if (e != null) {
-
-                    if (WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
-                    }
-
-                    return;
-                }
-
-                createUserRankMap(objects);
-            }
-        });
-    }
-
-    private void createUserRankMap(List<ParseUser> objects)
-    {
-        int i = 1;
-        for (ParseUser item : objects) {
-
-            userRankMap.put(item.getObjectId(), i);
-            i++;
         }
 
         setupQueryAdapter();
@@ -96,7 +62,7 @@ public class UserListActivity extends Activity
                 }
 
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
-                title.setText(userRankMap.get(item.getObjectId()) + ".  " + item.getUsername());
+                title.setText(rank + ".  " + item.getUsername());
 
                 TextView points = (TextView) view.findViewById(R.id.list_item_points);
                 if (item.getNumber("points") == null) {
@@ -105,6 +71,7 @@ public class UserListActivity extends Activity
                     points.setText(item.getNumber("points").toString());
                 }
 
+                rank++;
                 return view;
             }
         };
