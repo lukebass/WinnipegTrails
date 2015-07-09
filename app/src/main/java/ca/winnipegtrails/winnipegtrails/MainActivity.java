@@ -37,7 +37,7 @@ import java.util.Map;
 public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener
 {
     private GoogleMap googleMap;
-    private Map<String, Marker> mapMarkers = new HashMap<>();
+    private Map<Marker, Egg> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
 
     @Override
@@ -151,6 +151,41 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 return view;
             }
         });
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener()
+        {
+            @Override
+            public void onInfoWindowClick(Marker marker)
+            {
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser != null) {
+
+                    Egg egg = mapMarkers.get(marker);
+
+                    ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
+                    userEggQuery.whereEqualTo("user", currentUser);
+                    userEggQuery.whereEqualTo("egg", egg);
+
+                    userEggQuery.getFirstInBackground(new GetCallback<UserEggLinks>()
+                    {
+                        public void done(UserEggLinks object, ParseException e)
+                        {
+                            if (e != null) {
+
+                                if (WinnipegTrailsApplication.APPDEBUG) {
+                                    Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
+                                }
+                            }
+
+                            // Launch the egg activity
+                            Intent intent = new Intent(MainActivity.this, EggActivity.class);
+                            intent.putExtra("id", egg.getObjectId());
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void centerMap()
@@ -251,8 +286,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         for (Egg item : objects) {
 
             // Check for an existing marker for this item
-            Marker oldMarker = mapMarkers.get(item.getObjectId());
-            if (oldMarker != null) {
+            if (mapMarkers.containsValue(item)) {
                 // In range marker already exists, skip adding it
                 continue;
             }
@@ -275,7 +309,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
             // Add a new marker
             Marker marker = googleMap.addMarker(markerOpts);
-            mapMarkers.put(item.getObjectId(), marker);
+            mapMarkers.put(marker, item);
         }
     }
 
