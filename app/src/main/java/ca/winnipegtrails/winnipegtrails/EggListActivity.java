@@ -1,5 +1,6 @@
 package ca.winnipegtrails.winnipegtrails;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,7 +38,15 @@ public class EggListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_egg_list);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getActionBar() != null) {
+
+            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getActionBar().setCustomView(R.layout.actionbar);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(R.string.gems);
+        }
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {

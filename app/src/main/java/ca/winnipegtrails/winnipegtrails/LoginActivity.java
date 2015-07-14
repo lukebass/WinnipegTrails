@@ -1,5 +1,6 @@
 package ca.winnipegtrails.winnipegtrails;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -23,6 +25,16 @@ public class LoginActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if(getActionBar() != null) {
+
+            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getActionBar().setCustomView(R.layout.actionbar);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(R.string.app_name);
+        }
 
         // Set up the log in form
         usernameEdit = (EditText) findViewById(R.id.username);

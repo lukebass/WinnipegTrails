@@ -1,5 +1,6 @@
 package ca.winnipegtrails.winnipegtrails;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -27,7 +28,15 @@ public class UserListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getActionBar() != null) {
+
+            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getActionBar().setCustomView(R.layout.actionbar);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(R.string.leaderboard);
+        }
 
         TextView score = (TextView) findViewById(R.id.score);
         ParseUser currentUser = ParseUser.getCurrentUser();

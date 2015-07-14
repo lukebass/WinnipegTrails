@@ -10,14 +10,6 @@
     </style>
 
     <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:logo">@android:color/transparent</item>
         <item name="android:background">#ff0000</item>
-        <item name="android:titleTextStyle">@style/ActionBarTextStyle</item>
     </style>
-
-    <style name="ActionBarTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
 </resources>
