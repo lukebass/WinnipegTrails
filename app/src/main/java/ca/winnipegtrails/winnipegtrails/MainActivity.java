@@ -14,6 +14,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,11 +36,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener
+public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener
 {
     private GoogleMap googleMap;
     private Map<Marker, Egg> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
+    private Location currentLocation;
+    private LocationRequest locationRequest;
+    public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+    public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2500;
+    private Marker currentLocationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -192,7 +199,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
     private void centerMap()
     {
-        Location currentLocation = getLocation();
         if (currentLocation != null) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
         }
@@ -200,7 +206,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
     private void findEggs(List<Egg> objects)
     {
-        Location currentLocation = getLocation();
         if (currentLocation == null) {
             return;
         }
@@ -281,7 +286,6 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
     private void placeEggs(List<Egg> objects)
     {
-        Location currentLocation = getLocation();
         int avg = WinnipegTrailsApplication.modes[WinnipegTrailsApplication.getTransportMode()];
 
         // Loop through the results of the search
@@ -366,6 +370,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     protected void onResume()
     {
         super.onResume();
+
+        if (googleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+
         eggQuery(false);
     }
 
@@ -379,6 +388,25 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        createLocationRequest();
+    }
+
+    protected void createLocationRequest()
+    {
+        locationRequest = new LocationRequest();
+
+        // Sets the desired interval for active location updates. This interval is
+        // inexact. You may not receive updates at all if no location sources are available, or
+        // you may receive them slower than requested. You may also receive updates faster than
+        // requested if other applications are requesting location at a faster interval.
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Sets the fastest rate for active location updates. This interval is exact, and your
+        // application will never receive updates faster than this value.
+        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -389,12 +417,37 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
     }
 
     @Override
+    protected void onPause()
+    {
+        super.onPause();
+        // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
+        if (googleApiClient.isConnected()) {
+            stopLocationUpdates();
+        }
+    }
+
+    @Override
     protected void onStop()
     {
-        super.onStop();
         if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
+
+        super.onStop();
+    }
+
+    /**
+     * Removes location updates from the FusedLocationApi.
+     */
+    protected void stopLocationUpdates()
+    {
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+
+        // The final argument to {@code requestLocationUpdates()} is a LocationListener
+        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
     /**
@@ -408,9 +461,44 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
             Log.d(WinnipegTrailsApplication.APPTAG, "Connected to location services");
         }
 
-        Location currentLocation = getLocation();
+        currentLocation = getLocation();
         if (currentLocation != null) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+            updateCurrentLocation();
+        }
+
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates()
+    {
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    /**
+     * Callback that fires when the location changes.
+     */
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        currentLocation = location;
+        updateCurrentLocation();
+    }
+
+    private void updateCurrentLocation()
+    {
+        if (currentLocation != null) {
+
+            if (currentLocationMarker != null) {
+                currentLocationMarker.remove();
+            }
+
+            MarkerOptions markerOpts = new MarkerOptions()
+                    .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dude));
+
+            // Add a new marker
+            currentLocationMarker = googleMap.addMarker(markerOpts);
         }
     }
 
