@@ -121,10 +121,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         googleMap = map;
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.setMyLocationEnabled(true);
-
+        googleMap.setMyLocationEnabled(false);
         googleMap.getUiSettings().setAllGesturesEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(false);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
 
