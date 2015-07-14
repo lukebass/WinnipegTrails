@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +36,8 @@ public class EggListActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_egg_list);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
@@ -136,7 +140,7 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 String text = title.getText().toString();
 
-                if(eggMap.containsKey(text)) {
+                if (eggMap.containsKey(text)) {
 
                     // Launch the egg activity
                     Intent intent = new Intent(EggListActivity.this, EggActivity.class);
@@ -145,5 +149,17 @@ public class EggListActivity extends Activity
                 }
             }
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -2,6 +2,8 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -24,6 +26,8 @@ public class UserListActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView score = (TextView) findViewById(R.id.score);
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -81,5 +85,17 @@ public class UserListActivity extends Activity
         // Attach the query adapter to the view
         ListView userListView = (ListView) findViewById(R.id.list);
         userListView.setAdapter(userQueryAdapter);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

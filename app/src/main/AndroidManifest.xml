@@ -30,12 +30,14 @@
         <activity
             android:name=".EggListActivity"
             android:label="@string/gems"
-            android:theme="@style/ActionBar" />
+            android:theme="@style/ActionBar"
+            android:parentActivityName="ca.winnipegtrails.winnipegtrails.SettingsActivity" />
 
         <activity
             android:name=".UserListActivity"
             android:label="@string/leaderboard"
-            android:theme="@style/ActionBar" />
+            android:theme="@style/ActionBar"
+            android:parentActivityName="ca.winnipegtrails.winnipegtrails.SettingsActivity" />
 
         <activity
             android:name=".EggActivity"
