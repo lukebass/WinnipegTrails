@@ -89,7 +89,7 @@ public class EggListActivity extends Activity
             @Override
             public View getItemView(Egg item, View view, ViewGroup parent)
             {
-                if (view == null) {
+                if(view == null) {
                     view = View.inflate(getContext(), R.layout.list_item_egg, null);
                 }
 
@@ -98,20 +98,22 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 title.setText(item.getTitle());
 
-                if (userEggMap.contains(item.getObjectId())) {
+                if(userEggMap.contains(item.getObjectId())) {
 
                     eggMap.put(item.getTitle(), item.getObjectId());
                     ParseFile imageFile = item.getLargeImage();
 
-                    if (imageFile != null) {
+                    if(imageFile != null) {
                         image.setParseFile(imageFile);
                         image.loadInBackground();
-                    } else {
+                    }
+                    else {
                         image.setImageResource(R.drawable.icon);
                     }
 
                     title.setTextColor(Color.BLACK);
-                } else {
+                }
+                else {
                     image.setImageResource(R.drawable.hidden);
                     title.setTextColor(Color.GRAY);
                 }
@@ -134,7 +136,7 @@ public class EggListActivity extends Activity
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
                 String text = title.getText().toString();
 
-                if (eggMap.containsKey(text)) {
+                if(eggMap.containsKey(text)) {
 
                     // Launch the egg activity
                     Intent intent = new Intent(EggListActivity.this, EggActivity.class);

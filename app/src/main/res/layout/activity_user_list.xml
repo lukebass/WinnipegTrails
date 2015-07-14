@@ -22,18 +22,19 @@
         android:background="#ff0000"
         android:padding="10dp" >
 
-        <TextView
+        <ca.winnipegtrails.winnipegtrails.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/points"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
+        <ca.winnipegtrails.winnipegtrails.CustomTextView
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="20"/>
     </LinearLayout>

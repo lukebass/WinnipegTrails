@@ -5,15 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:padding="10dp"
     android:background="#ffffff"
     tools:context=".SettingsActivity" >
 
-    <TextView
+    <ca.winnipegtrails.winnipegtrails.CustomTextView
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:text="@string/exit"
         android:layout_gravity="end" />
@@ -24,11 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
+        <ca.winnipegtrails.winnipegtrails.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="#ff0000"
             android:textStyle="bold" />
 
@@ -37,23 +37,23 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="40dp" >
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:id="@+id/gem_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/gems"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:id="@+id/leaderboard_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/leaderboard"
                 android:layout_marginTop="5dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -62,7 +62,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="40dp" >
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -70,20 +70,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <TextView
+                <ca.winnipegtrails.winnipegtrails.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/mode"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <ca.winnipegtrails.winnipegtrails.CustomTextView
                     android:id="@+id/mode_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#ff0000" />
             </LinearLayout>
@@ -95,29 +95,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp" >
 
-                <TextView
+                <ca.winnipegtrails.winnipegtrails.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/notifications"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <ca.winnipegtrails.winnipegtrails.CustomTextView
                     android:id="@+id/notify_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -126,29 +126,29 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="40dp" >
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/faq"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/about"
                 android:layout_marginTop="5dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/manual"
                 android:layout_marginTop="5dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -157,21 +157,21 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="40dp" >
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <ca.winnipegtrails.winnipegtrails.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/prizes"
                 android:layout_marginTop="5dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

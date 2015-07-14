@@ -36,10 +36,10 @@ public class SettingsActivity extends Activity
 
             Boolean notify = currentUser.getBoolean("notifications");
             if (notify) {
-                notifyButton.setText("YES");
+                notifyButton.setText("ON");
                 notifyButton.setTextColor(Color.GREEN);
             } else {
-                notifyButton.setText("NO");
+                notifyButton.setText("OFF");
                 notifyButton.setTextColor(Color.RED);
             }
 
@@ -65,7 +65,7 @@ public class SettingsActivity extends Activity
             });
         } else {
 
-            notifyButton.setText("NO");
+            notifyButton.setText("OFF");
             notifyButton.setTextColor(Color.RED);
 
             loginButton.setText("LOGIN");
@@ -141,15 +141,16 @@ public class SettingsActivity extends Activity
     {
         CharSequence notifyText = view.getText();
 
-        if (notifyText == "NO") {
+        if(notifyText == "OFF") {
 
-            view.setText("YES");
+            view.setText("ON");
             view.setTextColor(Color.GREEN);
             currentUser.put("notifications", true);
             currentUser.saveInBackground();
-        } else {
+        }
+        else {
 
-            view.setText("NO");
+            view.setText("OFF");
             view.setTextColor(Color.RED);
             currentUser.put("notifications", false);
             currentUser.saveInBackground();
