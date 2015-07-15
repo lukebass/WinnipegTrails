@@ -13,21 +13,6 @@ public class CustomInfoWindow extends InfoWindow
     public CustomInfoWindow(MapView mapView)
     {
         super(R.layout.info_egg, mapView);
-
-        // Add own OnTouchListener to customize handling InfoWindow touch events
-        setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent event)
-            {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    close();
-                }
-
-                // Return true as we're done processing this event
-                return true;
-            }
-        });
     }
 
     @Override

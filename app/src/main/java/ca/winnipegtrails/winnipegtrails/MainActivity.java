@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import java.util.Map;
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener
 {
     private MapView mapView;
-    private Map<Marker, Egg> mapMarkers = new HashMap<>();
+    private Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
     private Location currentLocation;
     private LocationRequest locationRequest;
@@ -204,7 +205,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         for (Egg item : objects) {
 
             // Check for an existing marker for this item
-            if (mapMarkers.containsValue(item)) {
+            if (mapMarkers.containsKey(item.getObjectId())) {
                 // In range marker already exists, skip adding it
                 continue;
             }
@@ -221,12 +222,64 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
             Marker marker = new Marker(mapView, item.getTitle(), snippet, new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()));
             marker.setMarker(getResources().getDrawable(R.drawable.icon));
-            marker.setToolTip(new CustomInfoWindow(mapView));
+
+            CustomInfoWindow customInfoWindow = createCustomInfoWindow(item);
+            marker.setToolTip(customInfoWindow);
 
             // Add a new marker
             mapView.addMarker(marker);
-            mapMarkers.put(marker, item);
+            mapMarkers.put(item.getObjectId(), marker);
         }
+    }
+
+    private CustomInfoWindow createCustomInfoWindow(final Egg egg) {
+
+        final CustomInfoWindow customInfoWindow = new CustomInfoWindow(mapView);
+
+        customInfoWindow.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent event)
+            {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null) {
+
+                        ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
+                        userEggQuery.whereEqualTo("user", currentUser);
+                        userEggQuery.whereEqualTo("egg", egg);
+
+                        userEggQuery.getFirstInBackground(new GetCallback<UserEggLinks>()
+                        {
+                            public void done(UserEggLinks object, ParseException e)
+                            {
+                                if (e != null) {
+
+                                    if (WinnipegTrailsApplication.APPDEBUG) {
+                                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
+                                    }
+
+                                    return;
+                                }
+
+                                // Launch the egg activity
+                                Intent intent = new Intent(MainActivity.this, EggActivity.class);
+                                intent.putExtra("id", egg.getObjectId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                    customInfoWindow.close();
+                }
+
+                // Return true as we're done processing this event
+                return true;
+            }
+        });
+
+        return customInfoWindow;
     }
 
     /*
