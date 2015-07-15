@@ -209,20 +209,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 continue;
             }
 
-            // Set up the map marker's location
-            // Display a green marker with the item information
-            Marker marker = new Marker(mapView, item.getTitle(), "", new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()));
-            marker.setMarker(getResources().getDrawable(R.drawable.icon));
-            marker.setImage(getResources().getDrawable(R.drawable.icon));
-
+            String snippet = null;
             if (currentLocation != null) {
 
                 float[] results = new float[1];
                 Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
                 int time = Math.round(results[0] / avg);
-                marker.setDescription("Travel: " + String.valueOf(time) + " mins");
+                snippet = "Travel: " + String.valueOf(time) + " mins";
             }
+
+            Marker marker = new Marker(mapView, item.getTitle(), snippet, new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()));
+            marker.setMarker(getResources().getDrawable(R.drawable.icon));
+            marker.setToolTip(new CustomInfoWindow(mapView));
 
             // Add a new marker
             mapView.addMarker(marker);
@@ -406,7 +405,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 mapView.removeMarker(currentLocationMarker);
             }
 
-            currentLocationMarker = new Marker(mapView, "", "", new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            currentLocationMarker = new Marker(mapView, null, null, new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
             currentLocationMarker.setMarker(getResources().getDrawable(R.drawable.dude));
             mapView.addMarker(currentLocationMarker);
         }
