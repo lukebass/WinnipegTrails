@@ -17,15 +17,9 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.views.MapView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -36,9 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener
 {
-    private GoogleMap googleMap;
+    private MapView mapView;
     private Map<Marker, Egg> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
     private Location currentLocation;
@@ -111,95 +105,14 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         buildGoogleApiClient();
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map)
-    {
-        googleMap = map;
-
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.setMyLocationEnabled(false);
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(false);
-        googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.getUiSettings().setZoomControlsEnabled(false);
-
-        googleMap.setInfoWindowAdapter(new InfoWindowAdapter()
-        {
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker marker)
-            {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker marker)
-            {
-                // Getting view from the layout file info_window_layout
-                View view = getLayoutInflater().inflate(R.layout.info_egg, null);
-
-                // Getting reference to the TextView to set latitude
-                TextView title = (TextView) view.findViewById(R.id.info_title);
-                // Setting the title
-                title.setText(marker.getTitle());
-
-                // Getting reference to the TextView to set longitude
-                TextView snippet = (TextView) view.findViewById(R.id.info_snippet);
-                // Setting the snippet
-                snippet.setText(marker.getSnippet());
-
-                // Returning the view containing InfoWindow contents
-                return view;
-            }
-        });
-
-        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener()
-        {
-            @Override
-            public void onInfoWindowClick(Marker marker)
-            {
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                if (currentUser != null) {
-
-                    final Egg egg = mapMarkers.get(marker);
-
-                    ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
-                    userEggQuery.whereEqualTo("user", currentUser);
-                    userEggQuery.whereEqualTo("egg", egg);
-
-                    userEggQuery.getFirstInBackground(new GetCallback<UserEggLinks>()
-                    {
-                        public void done(UserEggLinks object, ParseException e)
-                        {
-                            if (e != null) {
-
-                                if (WinnipegTrailsApplication.APPDEBUG) {
-                                    Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user eggs", e);
-                                }
-
-                                return;
-                            }
-
-                            // Launch the egg activity
-                            Intent intent = new Intent(MainActivity.this, EggActivity.class);
-                            intent.putExtra("id", egg.getObjectId());
-                            startActivity(intent);
-                        }
-                    });
-                }
-            }
-        });
+        mapView = (MapView) findViewById(R.id.map);
     }
 
     private void centerMap()
     {
         if (currentLocation != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+            mapView.setCenter(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            mapView.setZoom(15);
         }
     }
 
@@ -298,10 +211,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
             // Set up the map marker's location
             // Display a green marker with the item information
-            MarkerOptions markerOpts = new MarkerOptions()
-                    .position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()))
-                    .title(item.getTitle())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
+            Marker marker = new Marker(mapView, item.getTitle(), "", new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()));
+            marker.setMarker(getResources().getDrawable(R.drawable.icon));
+            marker.setImage(getResources().getDrawable(R.drawable.icon));
 
             if (currentLocation != null) {
 
@@ -309,11 +221,11 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
                 Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLocation().getLatitude(), item.getLocation().getLongitude(), results);
 
                 int time = Math.round(results[0] / avg);
-                markerOpts.snippet("Travel: " + String.valueOf(time) + " mins");
+                marker.setDescription("Travel: " + String.valueOf(time) + " mins");
             }
 
             // Add a new marker
-            Marker marker = googleMap.addMarker(markerOpts);
+            mapView.addMarker(marker);
             mapMarkers.put(marker, item);
         }
     }
@@ -462,7 +374,9 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
 
         currentLocation = getLocation();
         if (currentLocation != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+
+            mapView.setCenter(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            mapView.setZoom(15);
             updateCurrentLocation();
         }
 
@@ -489,15 +403,12 @@ public class MainActivity extends Activity implements OnMapReadyCallback, Connec
         if (currentLocation != null) {
 
             if (currentLocationMarker != null) {
-                currentLocationMarker.remove();
+                mapView.removeMarker(currentLocationMarker);
             }
 
-            MarkerOptions markerOpts = new MarkerOptions()
-                    .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dude));
-
-            // Add a new marker
-            currentLocationMarker = googleMap.addMarker(markerOpts);
+            currentLocationMarker = new Marker(mapView, "", "", new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            currentLocationMarker.setMarker(getResources().getDrawable(R.drawable.dude));
+            mapView.addMarker(currentLocationMarker);
         }
     }
 
