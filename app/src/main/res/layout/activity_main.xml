@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <fragment
-        android:name="com.google.android.gms.maps.MapFragment"
+    <com.mapbox.mapboxsdk.views.MapView xmlns:mapbox="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        mapbox:mapid="torrinswanson.45c18795"
+        mapbox:accessToken="pk.eyJ1IjoidG9ycmluc3dhbnNvbiIsImEiOiJOSHVYVHl3In0.dnye2w0qHFvmfJL0x84b_A" />
 
     <ca.winnipegtrails.winnipegtrails.CustomTextView
         android:id="@+id/score"
