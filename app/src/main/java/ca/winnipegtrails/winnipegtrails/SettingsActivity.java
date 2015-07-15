@@ -156,4 +156,32 @@ public class SettingsActivity extends Activity
             currentUser.saveInBackground();
         }
     }
+
+    public void webSelected(View view)
+    {
+        TextView selected = (TextView) view;
+        String web = selected.getText().toString();
+
+        String url = null;
+        if(web.equals("FAQ")) {
+            url = "http://www.google.ca/";
+        }
+        else if(web.equals("ABOUT THIS APP")) {
+            url = "http://www.google.ca/";
+        }
+        else if(web.equals("VIEW MANUAL")) {
+            url = "http://www.google.ca/";
+        }
+        else if(web.equals("ADD GEM OR COMBO")) {
+            url = "http://www.google.ca/";
+        }
+        else if(web.equals("DONATIONS/PRIZES")) {
+            url = "http://www.google.ca/";
+        }
+
+        Intent intent = new Intent(this, WebViewActivity.class);
+        intent.putExtra("web", web);
+        intent.putExtra("url", url);
+        startActivity(intent);
+    }
 }
