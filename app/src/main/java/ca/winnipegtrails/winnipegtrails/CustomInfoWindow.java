@@ -21,8 +21,6 @@ public class CustomInfoWindow extends InfoWindow
             public boolean onTouch(View view, MotionEvent event)
             {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    // Still close the InfoWindow though
                     close();
                 }
 
