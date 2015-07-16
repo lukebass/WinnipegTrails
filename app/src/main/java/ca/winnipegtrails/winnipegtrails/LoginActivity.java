@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,11 +107,9 @@ public class LoginActivity extends Activity
         dialog.show();
 
         // Call the Parse login method
-        ParseUser.logInInBackground(username, password, new LogInCallback()
-        {
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
-            public void done(ParseUser user, ParseException e)
-            {
+            public void done(ParseUser user, ParseException e) {
                 dialog.dismiss();
                 if (e != null) {
                     // Show the error message
@@ -122,5 +122,17 @@ public class LoginActivity extends Activity
                 }
             }
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
