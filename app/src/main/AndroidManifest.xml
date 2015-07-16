@@ -63,6 +63,10 @@
 
         <activity
             android:name=".ModeActivity"
+            android:theme="@style/NoActionBar" />
+
+        <activity
+            android:name=".VideoActivity"
             android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
