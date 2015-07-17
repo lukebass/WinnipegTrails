@@ -2,6 +2,10 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +45,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2500;
     private Marker currentLocationMarker;
+    private Drawable dude;
+    private Drawable icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -105,6 +111,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         });
 
         buildGoogleApiClient();
+
+        Bitmap bitmapDude = BitmapFactory.decodeResource(getResources(), R.drawable.dude);
+        dude = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapDude, 250, 250, true));
+
+        Bitmap bitmapIcon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+        icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapIcon, 250, 250, true));
 
         mapView = (MapView) findViewById(R.id.map);
     }
@@ -221,7 +233,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
 
             Marker marker = new Marker(mapView, item.getTitle(), snippet, new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude()));
-            marker.setMarker(getResources().getDrawable(R.drawable.icon));
+            marker.setMarker(icon);
 
             CustomInfoWindow customInfoWindow = createCustomInfoWindow(item);
             marker.setToolTip(customInfoWindow);
@@ -460,7 +472,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
 
             currentLocationMarker = new Marker(mapView, null, null, new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-            currentLocationMarker.setMarker(getResources().getDrawable(R.drawable.dude));
+            currentLocationMarker.setMarker(dude);
             mapView.addMarker(currentLocationMarker);
         }
     }

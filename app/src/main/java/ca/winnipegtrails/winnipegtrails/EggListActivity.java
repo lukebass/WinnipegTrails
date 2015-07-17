@@ -72,6 +72,9 @@ public class EggListActivity extends Activity
                 }
             });
         }
+        else {
+            setupQueryAdapter();
+        }
     }
 
     private void createUserEggLinksMap(List<UserEggLinks> objects)
