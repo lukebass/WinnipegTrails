@@ -67,7 +67,6 @@ public class LoginActivity extends Activity
 
     private void login()
     {
-
         String username = usernameEdit.getText().toString().trim();
         String password = passwordEdit.getText().toString().trim();
 
@@ -102,7 +101,7 @@ public class LoginActivity extends Activity
         }
 
         // Set up a progress dialog
-        final ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.progress_login));
         dialog.show();
 

@@ -112,7 +112,7 @@ public class SignUpActivity extends Activity
         }
 
         // Set up a progress dialog
-        final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.progress_signup));
         dialog.show();
 

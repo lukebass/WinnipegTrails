@@ -25,6 +25,7 @@
     <string name="error_end">.</string>
     <string name="progress_signup">Signing you up!</string>
     <string name="progress_login">Logging you in!</string>
+    <string name="progress_egg">Loading gem details!</string>
     <string name="signup">Sign up</string>
     <string name="login">Login</string>
     <string name="submit">Submit</string>
