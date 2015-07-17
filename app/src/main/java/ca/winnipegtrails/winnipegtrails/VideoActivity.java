@@ -18,7 +18,8 @@ public class VideoActivity extends Activity
         VideoView videoView = (VideoView) findViewById(R.id.video);
         videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.intro));
 
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+        {
             @Override
             public void onCompletion(MediaPlayer mp)
             {

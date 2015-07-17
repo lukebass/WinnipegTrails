@@ -141,14 +141,13 @@ public class SettingsActivity extends Activity
     {
         CharSequence notifyText = view.getText();
 
-        if(notifyText == "OFF") {
+        if (notifyText == "OFF") {
 
             view.setText("ON");
             view.setTextColor(Color.GREEN);
             currentUser.put("notifications", true);
             currentUser.saveInBackground();
-        }
-        else {
+        } else {
 
             view.setText("OFF");
             view.setTextColor(Color.RED);
@@ -163,19 +162,15 @@ public class SettingsActivity extends Activity
         String web = selected.getText().toString();
 
         String url = null;
-        if(web.equals("FAQ")) {
+        if (web.equals("FAQ")) {
             url = "http://www.google.ca/";
-        }
-        else if(web.equals("ABOUT THIS APP")) {
+        } else if (web.equals("ABOUT THIS APP")) {
             url = "http://www.google.ca/";
-        }
-        else if(web.equals("VIEW MANUAL")) {
+        } else if (web.equals("VIEW MANUAL")) {
             url = "http://www.google.ca/";
-        }
-        else if(web.equals("ADD GEM OR COMBO")) {
+        } else if (web.equals("ADD GEM OR COMBO")) {
             url = "http://www.google.ca/";
-        }
-        else if(web.equals("DONATIONS/PRIZES")) {
+        } else if (web.equals("DONATIONS/PRIZES")) {
             url = "http://www.google.ca/";
         }
 

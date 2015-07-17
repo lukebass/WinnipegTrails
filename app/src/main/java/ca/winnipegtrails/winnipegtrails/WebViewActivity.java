@@ -21,7 +21,7 @@ public class WebViewActivity extends Activity
         String web = intent.getStringExtra("web");
         String url = intent.getStringExtra("url");
 
-        if(getActionBar() != null) {
+        if (getActionBar() != null) {
 
             getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             getActionBar().setCustomView(R.layout.actionbar);

@@ -30,7 +30,7 @@ public class SignUpActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        if(getActionBar() != null) {
+        if (getActionBar() != null) {
 
             getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             getActionBar().setCustomView(R.layout.actionbar);

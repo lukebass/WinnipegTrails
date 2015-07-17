@@ -28,7 +28,7 @@ public class LoginActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(getActionBar() != null) {
+        if (getActionBar() != null) {
 
             getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             getActionBar().setCustomView(R.layout.actionbar);
@@ -107,9 +107,11 @@ public class LoginActivity extends Activity
         dialog.show();
 
         // Call the Parse login method
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
+        ParseUser.logInInBackground(username, password, new LogInCallback()
+        {
             @Override
-            public void done(ParseUser user, ParseException e) {
+            public void done(ParseUser user, ParseException e)
+            {
                 dialog.dismiss();
                 if (e != null) {
                     // Show the error message

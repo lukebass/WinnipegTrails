@@ -32,7 +32,7 @@ public class UserListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        if(getActionBar() != null) {
+        if (getActionBar() != null) {
 
             getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             getActionBar().setCustomView(R.layout.actionbar);

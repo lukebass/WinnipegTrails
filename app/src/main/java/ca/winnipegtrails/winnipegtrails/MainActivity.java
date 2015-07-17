@@ -232,7 +232,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         }
     }
 
-    private CustomInfoWindow createCustomInfoWindow(final Egg egg) {
+    private CustomInfoWindow createCustomInfoWindow(final Egg egg)
+    {
 
         final CustomInfoWindow customInfoWindow = new CustomInfoWindow(mapView);
 
