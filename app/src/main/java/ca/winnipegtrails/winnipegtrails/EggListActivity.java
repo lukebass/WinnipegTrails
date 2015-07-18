@@ -2,6 +2,7 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 public class EggListActivity extends Activity
 {
+    private ProgressDialog dialog;
     private HashSet<String> userEggMap = new HashSet<>();
     private Map<String, String> eggMap = new HashMap<>();
 
@@ -37,6 +39,11 @@ public class EggListActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_egg_list);
+
+        // Set up a progress dialog
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.progress_egg_list));
+        dialog.show();
 
         if (getActionBar() != null) {
 
@@ -159,6 +166,8 @@ public class EggListActivity extends Activity
                 }
             }
         });
+
+        dialog.dismiss();
     }
 
     public boolean onOptionsItemSelected(MenuItem item)

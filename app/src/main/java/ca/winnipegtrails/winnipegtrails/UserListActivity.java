@@ -2,6 +2,7 @@ package ca.winnipegtrails.winnipegtrails;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 public class UserListActivity extends Activity
 {
+    private ProgressDialog dialog;
     private Map<String, Integer> userRankMap = new HashMap<>();
     private int rank = 1;
 
@@ -31,6 +33,11 @@ public class UserListActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+
+        // Set up a progress dialog
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.progress_user_list));
+        dialog.show();
 
         if (getActionBar() != null) {
 
@@ -128,6 +135,8 @@ public class UserListActivity extends Activity
         // Attach the query adapter to the view
         ListView userListView = (ListView) findViewById(R.id.list);
         userListView.setAdapter(userQueryAdapter);
+
+        dialog.dismiss();
     }
 
     public boolean onOptionsItemSelected(MenuItem item)
