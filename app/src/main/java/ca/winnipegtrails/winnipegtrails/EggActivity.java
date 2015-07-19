@@ -23,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +31,9 @@ public class EggActivity extends Activity
 {
     private ProgressDialog dialog;
     private ParseUser currentUser;
+    private HashSet<String> questionUserMap = new HashSet<>();
     private Egg egg;
     private Map<Integer, Question> questionMap = new HashMap<>();
-    private int score = 1;
-    private int total = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +48,56 @@ public class EggActivity extends Activity
 
         currentUser = ParseUser.getCurrentUser();
 
+        ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
+        questionUserQuery.whereEqualTo("user", currentUser);
+
+        questionUserQuery.findInBackground(new FindCallback<QuestionUserLinks>()
+        {
+            public void done(List<QuestionUserLinks> objects, ParseException e)
+            {
+                if (e != null) {
+
+                    if (WinnipegTrailsApplication.APPDEBUG) {
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user questions", e);
+                    }
+
+                    return;
+                }
+
+                createQuestionUserLinksMap(objects);
+            }
+        });
+
+        Button submitButton = (Button) findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                submit();
+            }
+        });
+
+        TextView cancelButton = (TextView) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                startActivity(new Intent(EggActivity.this, MainActivity.class));
+            }
+        });
+    }
+
+    private void createQuestionUserLinksMap(List<QuestionUserLinks> objects)
+    {
+        for (QuestionUserLinks item : objects) {
+            questionUserMap.add(item.getQuestion().getObjectId());
+        }
+
+        getEgg();
+    }
+
+    private void getEgg()
+    {
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
 
@@ -68,24 +118,6 @@ public class EggActivity extends Activity
 
                 egg = object;
                 getQuestions();
-            }
-        });
-
-        Button submitButton = (Button) findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                submit();
-            }
-        });
-
-        TextView cancelButton = (TextView) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                startActivity(new Intent(EggActivity.this, MainActivity.class));
             }
         });
     }
@@ -133,6 +165,7 @@ public class EggActivity extends Activity
 
         LinearLayout questions = (LinearLayout) findViewById(R.id.questions);
 
+        int score = 1;
         int i = 1;
         // Loop through the results of the search
         for (final Question item : objects) {
@@ -165,37 +198,22 @@ public class EggActivity extends Activity
             questionUserQuery.whereEqualTo("question", item);
             questionUserQuery.whereEqualTo("user", currentUser);
 
-            questionUserQuery.getFirstInBackground(new GetCallback<QuestionUserLinks>()
-            {
-                public void done(QuestionUserLinks object, ParseException e)
-                {
-                    if (e != null) {
+            if (questionUserMap.contains(item.getObjectId())) {
 
-                        if (WinnipegTrailsApplication.APPDEBUG) {
-                            Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for user questions", e);
-                        }
-
-                        return;
-                    }
-
-                    if (object != null) {
-                        answer.setText(item.getAnswer());
-                        answer.setEnabled(false);
-                        score++;
-                    }
-                }
-            });
+                answer.setText(item.getAnswer());
+                answer.setEnabled(false);
+                score++;
+            }
 
             questions.addView(question);
             questions.addView(answer);
             questionMap.put(i, item);
 
-            total++;
             i++;
         }
 
-        TextView total = (TextView) findViewById(R.id.total);
-        total.setText("You have " + score + " out of " + total + " gems at this location");
+        TextView totalGems = (TextView) findViewById(R.id.total);
+        totalGems.setText("You have " + score + " out of " + i + " gems at this location");
 
         dialog.dismiss();
     }
