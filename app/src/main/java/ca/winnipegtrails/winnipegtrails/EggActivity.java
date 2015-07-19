@@ -32,6 +32,8 @@ public class EggActivity extends Activity
     private ParseUser currentUser;
     private Egg egg;
     private Map<Integer, Question> questionMap = new HashMap<>();
+    private int score = 1;
+    private int total = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -179,6 +181,7 @@ public class EggActivity extends Activity
                     if (object != null) {
                         answer.setText(item.getAnswer());
                         answer.setEnabled(false);
+                        score++;
                     }
                 }
             });
@@ -187,8 +190,12 @@ public class EggActivity extends Activity
             questions.addView(answer);
             questionMap.put(i, item);
 
+            total++;
             i++;
         }
+
+        TextView total = (TextView) findViewById(R.id.total);
+        total.setText("You have " + score + " out of " + total + " gems at this location");
 
         dialog.dismiss();
     }
