@@ -28,6 +28,13 @@ public class LoginActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Intent intent = getIntent();
+        Boolean found = intent.getBooleanExtra("found", false);
+
+        if (found) {
+            Toast.makeText(this, R.string.user_login, Toast.LENGTH_LONG).show();
+        }
+
         if (getActionBar() != null) {
 
             getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

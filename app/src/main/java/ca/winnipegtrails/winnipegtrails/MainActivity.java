@@ -193,7 +193,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                         }
                     });
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.putExtra("found", true);
+                    startActivity(intent);
                 }
             }
         }

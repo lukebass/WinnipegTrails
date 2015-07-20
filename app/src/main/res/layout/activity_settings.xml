@@ -146,16 +146,6 @@
                 android:textStyle="bold"
                 android:clickable="true"
                 android:onClick="webSelected" />
-
-            <ca.winnipegtrails.winnipegtrails.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/manual"
-                android:layout_marginTop="5dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:onClick="webSelected" />
         </LinearLayout>
 
         <LinearLayout

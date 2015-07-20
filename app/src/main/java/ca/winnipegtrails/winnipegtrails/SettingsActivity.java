@@ -163,15 +163,13 @@ public class SettingsActivity extends Activity
 
         String url = null;
         if (web.equals("FAQ")) {
-            url = "http://www.google.ca/";
+            url = "http://www.winnipegtrails.ca/app/";
         } else if (web.equals("ABOUT THIS APP")) {
-            url = "http://www.google.ca/";
-        } else if (web.equals("VIEW MANUAL")) {
-            url = "http://www.google.ca/";
+            url = "http://www.winnipegtrails.ca/app/";
         } else if (web.equals("ADD GEM OR COMBO")) {
-            url = "http://www.google.ca/";
+            url = "http://www.winnipegtrails.ca/add-a-hidden-gem/";
         } else if (web.equals("DONATIONS/PRIZES")) {
-            url = "http://www.google.ca/";
+            url = "http://www.winnipegtrails.ca/app/";
         }
 
         Intent intent = new Intent(this, WebViewActivity.class);

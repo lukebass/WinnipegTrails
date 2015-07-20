@@ -44,4 +44,5 @@
     <string name="no_eggs_found">No gems are within range of you.</string>
     <string name="no_mode_selected">You must select a mode of transport.</string>
     <string name="found_gem">Well done. You found a hidden gem!</string>
+    <string name="user_login">To save this gem, keep score and win prizes, you have to login.</string>
 </resources>
