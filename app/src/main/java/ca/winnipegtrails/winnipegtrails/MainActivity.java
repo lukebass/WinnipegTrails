@@ -38,15 +38,15 @@ import java.util.Map;
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener
 {
     private MapView mapView;
+    private Location currentLocation;
     private Map<String, Marker> mapMarkers = new HashMap<>();
     private GoogleApiClient googleApiClient;
-    private Location currentLocation;
     private LocationRequest locationRequest;
+    private Drawable icon;
+    private Drawable dude;
+    private Marker currentLocationMarker;
     public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2500;
-    private Marker currentLocationMarker;
-    private Drawable dude;
-    private Drawable icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -113,10 +113,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         buildGoogleApiClient();
 
         Bitmap bitmapDude = BitmapFactory.decodeResource(getResources(), R.drawable.dude);
-        dude = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapDude, 250, 250, true));
+        dude = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapDude, 200, 200, true));
 
         Bitmap bitmapIcon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-        icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapIcon, 250, 250, true));
+        icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmapIcon, 200, 200, true));
 
         mapView = (MapView) findViewById(R.id.map);
     }
@@ -124,9 +124,41 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private void centerMap()
     {
         if (currentLocation != null) {
+
             mapView.setCenter(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
             mapView.setZoom(15);
         }
+    }
+
+    /*
+     * Set up the query to update the map view
+     */
+    private void eggQuery(final Boolean find)
+    {
+        ParseQuery<Egg> eggQuery = Egg.getQuery();
+        eggQuery.orderByAscending("title");
+
+        eggQuery.findInBackground(new FindCallback<Egg>()
+        {
+            @Override
+            public void done(List<Egg> objects, ParseException e)
+            {
+                if (e != null) {
+
+                    if (WinnipegTrailsApplication.APPDEBUG) {
+                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
+                    }
+
+                    return;
+                }
+
+                if (find) {
+                    findEggs(objects);
+                } else {
+                    placeEggs(objects);
+                }
+            }
+        });
     }
 
     private void findEggs(List<Egg> objects)
@@ -298,53 +330,13 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         return customInfoWindow;
     }
 
-    /*
-     * Set up the query to update the map view
-     */
-    private void eggQuery(final Boolean find)
+    @Override
+    protected void onStart()
     {
-        ParseQuery<Egg> eggQuery = Egg.getQuery();
-        eggQuery.orderByAscending("title");
-
-        eggQuery.findInBackground(new FindCallback<Egg>()
-        {
-            @Override
-            public void done(List<Egg> objects, ParseException e)
-            {
-                if (e != null) {
-
-                    if (WinnipegTrailsApplication.APPDEBUG) {
-                        Log.d(WinnipegTrailsApplication.APPTAG, "An error occurred while querying for eggs", e);
-                    }
-
-                    return;
-                }
-
-                if (find) {
-                    findEggs(objects);
-                } else {
-                    placeEggs(objects);
-                }
-            }
-        });
+        super.onStart();
+        googleApiClient.connect();
     }
 
-    /*
-     * Get the current location
-     */
-    private Location getLocation()
-    {
-        if (googleApiClient.isConnected()) {
-            return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        } else {
-            Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
-            return null;
-        }
-    }
-
-    /*
-     * Called when the Activity is resumed. Updates the view.
-     */
     @Override
     protected void onResume()
     {
@@ -355,6 +347,26 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         }
 
         eggQuery(false);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
+        if (googleApiClient.isConnected()) {
+            stopLocationUpdates();
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+
+        super.onStop();
     }
 
     /**
@@ -388,47 +400,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        googleApiClient.connect();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
-        if (googleApiClient.isConnected()) {
-            stopLocationUpdates();
-        }
-    }
-
-    @Override
-    protected void onStop()
-    {
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
-
-        super.onStop();
-    }
-
-    /**
-     * Removes location updates from the FusedLocationApi.
-     */
-    protected void stopLocationUpdates()
-    {
-        // It is a good practice to remove location requests when the activity is in a paused or
-        // stopped state. Doing so helps battery performance and is especially
-        // recommended in applications that request frequent location updates.
-
-        // The final argument to {@code requestLocationUpdates()} is a LocationListener
-        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-    }
-
     /**
      * Runs when a GoogleApiClient object successfully connects.
      */
@@ -451,9 +422,37 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         startLocationUpdates();
     }
 
-    protected void startLocationUpdates()
+    @Override
+    public void onConnectionFailed(ConnectionResult result)
     {
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        if (WinnipegTrailsApplication.APPDEBUG) {
+            // In debug mode, log the status
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause)
+    {
+        if (WinnipegTrailsApplication.APPDEBUG) {
+            // In debug mode, log the status
+            Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended: Cause = " + cause);
+        }
+
+        googleApiClient.connect();
+    }
+
+    /*
+     * Get the current location
+     */
+    private Location getLocation()
+    {
+        if (googleApiClient.isConnected()) {
+            return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        } else {
+            Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
+            return null;
+        }
     }
 
     /**
@@ -480,23 +479,22 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         }
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult result)
+    protected void startLocationUpdates()
     {
-        if (WinnipegTrailsApplication.APPDEBUG) {
-            // In debug mode, log the status
-            Log.d(WinnipegTrailsApplication.APPTAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
-    @Override
-    public void onConnectionSuspended(int cause)
+    /**
+     * Removes location updates from the FusedLocationApi.
+     */
+    protected void stopLocationUpdates()
     {
-        if (WinnipegTrailsApplication.APPDEBUG) {
-            // In debug mode, log the status
-            Log.d(WinnipegTrailsApplication.APPTAG, "Connection suspended: Cause = " + cause);
-        }
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
 
-        googleApiClient.connect();
+        // The final argument to {@code requestLocationUpdates()} is a LocationListener
+        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 }
