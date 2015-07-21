@@ -65,9 +65,7 @@ public class LoginActivity extends Activity
         {
             public void onClick(View view)
             {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
     }
