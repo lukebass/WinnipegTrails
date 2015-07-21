@@ -167,6 +167,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             return;
         }
 
+        final ParseUser currentUser = ParseUser.getCurrentUser();
         float distance = 0;
         Egg closest = null;
 
@@ -178,18 +179,17 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
             if (results[0] < item.getActionRadiusMeters().floatValue()) {
 
-                if (closest == null) {
-
-                    distance = results[0];
-                    closest = item;
-                } else if (results[0] < distance) {
-
-                    distance = results[0];
-                    closest = item;
-                }
-
-                final ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
+
+                    if (closest == null) {
+
+                        distance = results[0];
+                        closest = item;
+                    } else if (results[0] < distance) {
+
+                        distance = results[0];
+                        closest = item;
+                    }
 
                     ParseQuery<UserEggLinks> userEggQuery = UserEggLinks.getQuery();
                     userEggQuery.whereEqualTo("user", currentUser);
@@ -229,6 +229,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                     Intent intent = new Intent(this, LoginActivity.class);
                     intent.putExtra("found", true);
                     startActivity(intent);
+                    return;
                 }
             }
         }
