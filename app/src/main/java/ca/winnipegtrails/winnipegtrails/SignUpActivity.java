@@ -76,7 +76,12 @@ public class SignUpActivity extends Activity
 
         if (email.length() == 0) {
 
-            validationError = true;
+            if (validationError) {
+                validationErrorMessage.append(getString(R.string.error_join));
+            } else {
+                validationError = true;
+            }
+
             validationErrorMessage.append(getString(R.string.error_blank_email));
         }
 

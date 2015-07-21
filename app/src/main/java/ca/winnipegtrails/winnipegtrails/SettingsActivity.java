@@ -77,33 +77,6 @@ public class SettingsActivity extends Activity
                 }
             });
         }
-
-        TextView gemButton = (TextView) findViewById(R.id.gem_button);
-        gemButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                startActivity(new Intent(SettingsActivity.this, EggListActivity.class));
-            }
-        });
-
-        TextView leaderboardButton = (TextView) findViewById(R.id.leaderboard_button);
-        leaderboardButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                startActivity(new Intent(SettingsActivity.this, UserListActivity.class));
-            }
-        });
-
-        TextView cancelButton = (TextView) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-            }
-        });
     }
 
     private void modeSelected(TextView view)

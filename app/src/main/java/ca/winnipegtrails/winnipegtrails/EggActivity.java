@@ -167,7 +167,7 @@ public class EggActivity extends Activity
 
         int score = 1;
         int i = 1;
-        // Loop through the results of the search
+
         for (final Question item : objects) {
 
             // add text view
@@ -193,10 +193,6 @@ public class EggActivity extends Activity
 
             LinearLayout.LayoutParams answerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             answer.setLayoutParams(answerParams);
-
-            ParseQuery<QuestionUserLinks> questionUserQuery = QuestionUserLinks.getQuery();
-            questionUserQuery.whereEqualTo("question", item);
-            questionUserQuery.whereEqualTo("user", currentUser);
 
             if (questionUserMap.contains(item.getObjectId())) {
 

@@ -117,7 +117,7 @@ public class UserListActivity extends Activity
                 }
 
                 TextView title = (TextView) view.findViewById(R.id.list_item_title);
-                title.setText(userRankMap.get(item.getObjectId()) + ".  " + item.getUsername());
+                title.setText(userRankMap.get(item.getObjectId()) + ". " + item.getUsername());
 
                 TextView points = (TextView) view.findViewById(R.id.list_item_points);
                 if (item.getNumber("points") == null) {
